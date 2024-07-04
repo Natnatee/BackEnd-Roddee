@@ -18,11 +18,11 @@ const carSchema = new mongoose.Schema({
     required: true,
   },
   year: {
-    type: String,
+    type: Number,
     required: true,
   },
   mileage: {
-    type: String,
+    type: Number,
     required: true,
   },
   color: {
@@ -34,7 +34,7 @@ const carSchema = new mongoose.Schema({
     required: true,
   },
   enginecap: {
-    type: String,
+    type: Number,
     required: true,
   },
   cushion: {
@@ -50,11 +50,11 @@ const carSchema = new mongoose.Schema({
     required: true,
   },
   price: {
-    type: String,
+    type: Number,
     required: true,
   },
   pnumber: {
-    type: String,
+    type: Number,
     required: true,
   },
   address: {
@@ -125,6 +125,7 @@ const carSchema = new mongoose.Schema({
       message: (props) => `${props.value} is not a valid URL!`,
     },
   },
+  createOn: { type: Date, default: new Date().getTime() },
 });
 
 const Car = mongoose.model("Car", carSchema, "Cars");

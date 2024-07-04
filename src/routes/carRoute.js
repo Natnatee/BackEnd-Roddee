@@ -1,5 +1,8 @@
 import express from "express";
 import * as carController from "../controllers/carController.js";
+import Car from "../models/Car.js";
+import express from "express";
+import * as carController from "../controllers/carController.js";
 
 const router = express.Router();
 
@@ -10,5 +13,9 @@ router.post("/", carController.createCar);
 router.get("/car-random", carController.randomAllCars);
 
 // API -
+router.post("/", carController.createCar);
+router.get("/Car-New", carController.carLastest);
+router.get("/searchbar", carController.searchCar);
 
 export default router;
+

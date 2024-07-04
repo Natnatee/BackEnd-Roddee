@@ -12,9 +12,10 @@ router.post("/", carController.createCar);
 // API - RANDOM
 router.get("/car-random", carController.randomAllCars);
 
-// API -
-router.post("/", carController.createCar);
+// API - Sort lastest
 router.get("/Car-New", carController.carLastest);
+
+// API - SearchCar
 router.get("/searchbar", carController.searchCar);
 
 export default router;

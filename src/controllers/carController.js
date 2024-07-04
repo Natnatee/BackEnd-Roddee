@@ -14,7 +14,7 @@ const createCar = async (req, res, next) => {
 };
 
 // API - Get Car By ID
-const getCarById = async (req, res, next) => {
+const getCarById = async (id) => {
     try {
         const { id } = req.params;
         const car = await carService.getCarById(id);
@@ -27,4 +27,4 @@ const getCarById = async (req, res, next) => {
     }
 };
 
-export default { createCar, getCarById };
+export { createCar, getCarById };

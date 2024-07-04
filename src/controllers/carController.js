@@ -13,4 +13,14 @@ const createCar = async (req, res, next) => {
     }
 };
 
-export { createCar };
+// car lastest 
+const carLastest = async(req,res,next)=>{
+    try {
+        const last = await carService.carLast();
+        res.json(last)
+    } catch (error) {
+        res.status(400).json({message:"i here tu"})
+    }
+}
+
+export { createCar,carLastest};

@@ -60,5 +60,5 @@ const carLast = async () => {
   return lastest;
 };
 
-export { createCar, carLast, searchCar, randomCars };
+export default { createCar, carLast, searchCar, randomCars };
 

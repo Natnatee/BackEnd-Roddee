@@ -15,8 +15,6 @@ const createCar = async (req, res, next) => {
 };
 
  
-  
-
 // API - RANDOM
 
 const randomAllCars = async (req, res, next) => {

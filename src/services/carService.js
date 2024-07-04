@@ -7,4 +7,11 @@ const createCar = async (data) => {
     return car;
 };
 
-export default { createCar };
+// lastest car 
+const carLast = async()=>{
+    const lastest =  await Car.find().sort({ year: -1 });
+    return lastest;
+}
+
+export default { createCar,carLast};
+

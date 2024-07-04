@@ -5,5 +5,8 @@ const router = express.Router();
 
 // API - 1 Post
 router.post('/', carController.createCar);
+router.get("/Car-New",carController.carLastest)
+
 
 export default router;
+

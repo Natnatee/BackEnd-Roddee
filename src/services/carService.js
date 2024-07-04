@@ -7,6 +7,11 @@ const createCar = async (data) => {
   return car;
 };
 
+const randomCars = async () => {
+  const randomCar = await Car.aggregate([{ $sample: { size: 6 } }]);
+  return randomCar;
+};
+
 const searchCar = async (query) => {
   if (query === "") {
     return { message: "not found" };
@@ -55,4 +60,5 @@ const carLast = async () => {
   return lastest;
 };
 
-export { createCar, carLast, searchCar };
+export { createCar, carLast, searchCar, randomCars };
+

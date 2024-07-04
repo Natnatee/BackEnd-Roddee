@@ -49,4 +49,10 @@ const searchCar = async (query) => {
   return cars;
 };
 
-export default { createCar, searchCar };
+// lastest car
+const carLast = async () => {
+  const lastest = await Car.find().sort({ year: -1 });
+  return lastest;
+};
+
+export { createCar, carLast, searchCar };

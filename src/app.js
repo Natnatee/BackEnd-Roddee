@@ -27,12 +27,8 @@ app.use(limiter);
 // > Static Files
 
 // Routes
-app.use("/api/users", userRoutes);
-app.use("/api/cars", carRoutes);
-
-app.get("/test", (req, res, next) => {
-  res.status(223).json({ message: "Luffy Gear 5" });
-});
+app.use('/api/users', userRoutes);
+app.use('/api/cars', carRoutes);
 
 //Handle404
 

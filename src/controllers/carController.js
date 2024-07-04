@@ -69,4 +69,14 @@ const searchCar = async (req, res, next) => {
   }
 };
 
-export { createCar, searchCar };
+// car lastest 
+const carLastest = async(req,res,next)=>{
+    try {
+        const last = await carService.carLast();
+        res.json(last)
+    } catch (error) {
+        res.status(400).json({message:"i here tu"})
+    }
+}
+
+export { createCar, searchCar,carLastest};

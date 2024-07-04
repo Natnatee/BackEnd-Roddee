@@ -54,7 +54,7 @@ const carSchema = new mongoose.Schema({
     required: true,
   },
   pnumber: {
-    type: String,
+    type: Number,
     required: true,
   },
   address: {
@@ -125,6 +125,7 @@ const carSchema = new mongoose.Schema({
       message: (props) => `${props.value} is not a valid URL!`,
     },
   },
+  createOn: { type: Date, default: new Date().getTime() },
 });
 
 const Car = mongoose.model("Car", carSchema, "Cars");

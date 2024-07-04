@@ -1,5 +1,6 @@
 import carService from '../services/carService.js';
 
+
 // API - Create Car
 const createCar = async (req, res, next) => {
     try {
@@ -13,4 +14,20 @@ const createCar = async (req, res, next) => {
     }
 };
 
-export { createCar };
+ 
+  
+
+// API - RANDOM
+
+const randomAllCars = async (req, res, next) => {
+
+        try {
+            
+            const result = await carService.randomCars();
+            res.status(201).json({ message: 'Random car success', result});
+            } catch (error) {
+                next(error);
+            }
+        };
+
+export { createCar, randomAllCars };

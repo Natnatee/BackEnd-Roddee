@@ -17,7 +17,7 @@ const app = express();
 app.use(cors());  // เปิดใช้งาน CORS
 app.use(express.json());
 app.use(helmet());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));//ทำให้นอกจาก json ยังรับในรูป url.encoded ได้
 app.use(morgan('dev'));
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes

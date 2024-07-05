@@ -1,17 +1,99 @@
-import carService from '../services/carService.js';
+import carService from "../services/carService.js";
+
 
 // API - Create Car
 const createCar = async (req, res, next) => {
-    try {
-        const { headline, brand, model, type, year, mileage, color, fuel, enginecap, cushion, seat, gear, price, pnumber, address, additionalInfo, file1, file2, file3, file4, file5, file6 } = req.body;
-        const data = { headline, brand, model, type, year, mileage, color, fuel, enginecap, cushion, seat, gear, price, pnumber, address, additionalInfo, file1, file2, file3, file4, file5, file6 };
-        const car = await carService.createCar(data);
+  try {
+    const {
+      headline,
+      brand,
+      model,
+      type,
+      year,
+      mileage,
+      color,
+      fuel,
+      enginecap,
+      cushion,
+      seat,
+      gear,
+      price,
+      pnumber,
+      address,
+      additionalInfo,
+      file1,
+      file2,
+      file3,
+      file4,
+      file5,
+      file6,
+    } = req.body;
+    const data = {
+      headline,
+      brand,
+      model,
+      type,
+      year,
+      mileage,
+      color,
+      fuel,
+      enginecap,
+      cushion,
+      seat,
+      gear,
+      price,
+      pnumber,
+      address,
+      additionalInfo,
+      file1,
+      file2,
+      file3,
+      file4,
+      file5,
+      file6,
+    };
+    const car = await carService.createCar(data);
 
-        res.status(201).json({ message: 'Car Created', data: car });
-    } catch (error) {
-        next(error);
-    }
+    res.status(201).json({ message: "Car Created", data: car });
+  } catch (error) {
+    next(error);
+  }
 };
+
+ 
+// API - RANDOM
+
+const randomAllCars = async (req, res, next) => {
+
+        try {
+            
+            const result = await carService.randomCars();
+            res.status(201).json({ message: 'Random car success', result});
+            } catch (error) {
+                next(error);
+            }
+        };
+
+
+const searchCar = async (req, res, next) => {
+  try {
+    const query = req.body.query;
+    const cars = await carService.searchCar(query);
+    res.json(cars);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// car lastest 
+const carLastest = async(req,res,next)=>{
+    try {
+        const last = await carService.carLast();
+        res.json(last)
+    } catch (error) {
+        res.status(400).json({message:"i here tu"})
+    }
+}
 
 // API - Get Car By ID
 const getCarById = async (req, res, next) => {
@@ -25,4 +107,4 @@ const getCarById = async (req, res, next) => {
     }
 };
 
-export { createCar, getCarById };
+export { createCar, getCarById, searchCar,carLastest, randomAllCars};

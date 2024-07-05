@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     // } catch (error) {
     //     res.status(500).json({ message: error.message });
     // }
-    res.status(200).json({message:"ok"})
+    res.status(200).json({message})
 });
 
 // Add a new user

@@ -7,6 +7,16 @@ const createCar = async (data) => {
   return car;
 };
 
+const getCarById = async (id) => {
+  try {
+    const car = await Car.findById(id); // ใช้ findById เพื่อค้นหารถตาม id
+    console.log('ServiceCar', car)
+    return car;
+  } catch (error) {
+    throw new Error('Error fetching car');
+  }
+};
+
 const randomCars = async () => {
   const randomCar = await Car.aggregate([{ $sample: { size: 6 } }]);
   return randomCar;
@@ -60,5 +70,5 @@ const carLast = async () => {
   return lastest;
 };
 
-export default { createCar, carLast, searchCar, randomCars };
+export default { createCar, carLast, searchCar, randomCars, getCarById };
 

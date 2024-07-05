@@ -103,16 +103,19 @@ const getCarById = async (req, res, next) => {
 };
 
 const carBrand = async (req, res, next) => {
-    try {
-      const { brand } = req.params; // ดึงค่า 'brand' จาก params ของ request
-      const carBrand = await carService.Car.carBrand(); // รอให้ฟังก์ชัน carBrand ของ carService ดึงข้อมูลและเก็บไว้ที่ตัวแปร carBrand
-      res.status(200).json({ message: carBrand }); // ส่งค่า carBrand กลับไปที่ client ในรูปแบบ JSON
-    } catch (error) {
-      next(error); // หากเกิดข้อผิดพลาด ส่งข้อผิดพลาดไปยัง middleware ถัดไป
+  const { brand } = req.params;
+  try {
+    const car = await carService.carBrand(brand); // เปลี่ยนจาก Number(brand) เป็น brand
+    if (!car) {
+      return res.status(404).json({ message: 'Car Brand not found' });
     }
-  };
-  
+    res.status(200).json({ message: 'Car Brand', data: car });
+  } catch (error) {
+    next(error);
+  }
+};
 
+  
 export {
   createCar,
   getCarById,

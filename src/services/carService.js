@@ -70,15 +70,8 @@ const carLast = async () => {
   return lastest;
 };
 
-// carService.js
-const carBrand = async (brand) => {
-  try {
-    const brand = await Car.findById(brand); // ใช้ findById เพื่อค้นหารถตาม id
-    console.log("ServiceCar", car);
-    return brand;
-  } catch (error) {
-    throw Error("Error fetching car");
-  }
+const carBrand = async (brand) => { // ฟังก์ชัน asynchronous เพื่อค้นหา car ตาม brand
+  return await Car.findOne({ brand }); // ค้นหา car ที่มี brand ตรงกับค่าที่ส่งเข้ามา
 };
 
 

@@ -1,16 +1,17 @@
-import express, { Router } from 'express';
+import express from 'express';
 import User from '../models/user.js';
 
 const router = express.Router();
 
 // Get all users
 router.get('/', async (req, res) => {
-    try {
-        const users = await User.find();
-        res.json(users);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    // try {
+    //     const users = await User.find();
+    //     res.json(users);
+    // } catch (error) {
+    //     res.status(500).json({ message: error.message });
+    // }
+    res.status(200).json({message})
 });
 
 // Add a new user

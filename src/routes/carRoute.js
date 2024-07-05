@@ -15,6 +15,11 @@ router.get("/Car-New", carController.carLastest);
 
 // API - SearchCar
 router.get("/searchbar", carController.searchCar);
+router.post("/", carController.createCar);
+
+// API - Get Car By ID
+router.get('/:id', carController.getCarById);
 
 export default router;
+
 

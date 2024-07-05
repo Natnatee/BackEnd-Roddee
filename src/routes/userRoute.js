@@ -7,4 +7,8 @@ const router = express.Router();
 router.post("/register", userController.createUser);
 // API - 2 Login
 
+
+// API - SoftDelete
+router.delete("/:email", userController.deleteUserEmail);
+
 export default router;

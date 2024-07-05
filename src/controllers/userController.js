@@ -28,5 +28,9 @@ const createUser = async (req, res, next) => {
       next(error);
     }
   };
+
+  const deleteUserEmail = async (req, res, next) => {
+    res.send('DELETE /api/users/:email');
+  };
   
-export { createUser };
+export { createUser, deleteUserEmail };

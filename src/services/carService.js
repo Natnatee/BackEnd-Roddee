@@ -10,10 +10,10 @@ const createCar = async (data) => {
 const getCarById = async (id) => {
   try {
     const car = await Car.findById(id); // ใช้ findById เพื่อค้นหารถตาม id
-    console.log('ServiceCar', car)
+    console.log("ServiceCar", car);
     return car;
   } catch (error) {
-    throw new Error('Error fetching car');
+    throw new Error("Error fetching car");
   }
 };
 
@@ -26,7 +26,7 @@ const searchCar = async (query) => {
   if (query === "") {
     return { message: "not found" };
   }
-  const searchQuery = { $or: [] };
+const searchQuery = { $or: [] };
   let searchableFields = [];
   console.log(typeof query);
   if (typeof query == "string") {
@@ -70,5 +70,23 @@ const carLast = async () => {
   return lastest;
 };
 
-export default { createCar, carLast, searchCar, randomCars, getCarById };
+// carService.js
+const carBrand = async (brand) => {
+  try {
+    const brand = await Car.findById(brand); // ใช้ findById เพื่อค้นหารถตาม id
+    console.log("ServiceCar", car);
+    return brand;
+  } catch (error) {
+    throw Error("Error fetching car");
+  }
+};
 
+
+export default {
+  createCar,
+  carLast,
+  searchCar,
+  randomCars,
+  getCarById,
+  carBrand,
+};

@@ -1,5 +1,5 @@
+import Car from "../models/Car.js";
 import carService from "../services/carService.js";
-
 
 // API - Create Car
 const createCar = async (req, res, next) => {
@@ -60,20 +60,16 @@ const createCar = async (req, res, next) => {
   }
 };
 
- 
 // API - RANDOM
 
 const randomAllCars = async (req, res, next) => {
-
-        try {
-            
-            const result = await carService.randomCars();
-            res.status(201).json({ message: 'Random car success', result});
-            } catch (error) {
-                next(error);
-            }
-        };
-
+  try {
+    const result = await carService.randomCars();
+    res.status(201).json({ message: "Random car success", result });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const searchCar = async (req, res, next) => {
   try {
@@ -85,26 +81,43 @@ const searchCar = async (req, res, next) => {
   }
 };
 
-// car lastest 
-const carLastest = async(req,res,next)=>{
-    try {
-        const last = await carService.carLast();
-        res.json(last)
-    } catch (error) {
-        res.status(400).json({message:"i here tu"})
-    }
-}
+// car lastest
+const carLastest = async (req, res, next) => {
+  try {
+    const last = await carService.carLast();
+    res.json(last);
+  } catch (error) {
+    res.status(400).json({ message: "i here tu" });
+  }
+};
 
 // API - Get Car By ID
 const getCarById = async (req, res, next) => {
-    try {
-        const { id } = req.params; //ถ้าอยากเช็คให้
-        console.log(id)
-        const car = await carService.getCarById(id); //carService.getCarById จะไปตามหาค่าที่เราส่งไปขอ
-        res.status(200).json({ message: car });
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const { id } = req.params; //ถ้าอยากเช็คให้
+    const car = await carService.getCarById(id);
+    res.status(200).json({ message: car });
+  } catch (error) {
+    next(error);
+  }
 };
 
-export { createCar, getCarById, searchCar,carLastest, randomAllCars};
+const carBrand = async (req, res, next) => {
+    try {
+      const { brand } = req.params; // ดึงค่า 'brand' จาก params ของ request
+      const carBrand = await carService.Car.carBrand(); // รอให้ฟังก์ชัน carBrand ของ carService ดึงข้อมูลและเก็บไว้ที่ตัวแปร carBrand
+      res.status(200).json({ message: carBrand }); // ส่งค่า carBrand กลับไปที่ client ในรูปแบบ JSON
+    } catch (error) {
+      next(error); // หากเกิดข้อผิดพลาด ส่งข้อผิดพลาดไปยัง middleware ถัดไป
+    }
+  };
+  
+
+export {
+  createCar,
+  getCarById,
+  searchCar,
+  carLastest,
+  randomAllCars,
+  carBrand,
+};

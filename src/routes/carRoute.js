@@ -20,6 +20,9 @@ router.post("/", carController.createCar);
 // API - Get Car By ID
 router.get('/:id', carController.getCarById);
 
+// API - Get Car By Brand
+router.get('/brand/:brand', carController.carBrand);
+
 export default router;
 
 

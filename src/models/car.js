@@ -54,7 +54,7 @@ const carSchema = new mongoose.Schema({
     required: true,
   },
   pnumber: {
-    type: Number,
+    type: String,
     required: true,
   },
   address: {

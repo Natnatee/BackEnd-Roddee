@@ -14,14 +14,12 @@ const createCar = async (req, res, next) => {
 };
 
 // API - Get Car By ID
-const getCarById = async (id) => {
+const getCarById = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const car = await carService.getCarById(id);
-        if (!car) {
-            throw new NotFoundError(`Car with id ${id} not found`);
-        }
-        res.status(200).json({ message: 'Get Car By id', data: car });
+        const { id } = req.params; //ถ้าอยากเช็คให้
+        console.log(id)
+        const car = await carService.getCarById(id); //carService.getCarById จะไปตามหาค่าที่เราส่งไปขอ
+        res.status(200).json({ message: car });
     } catch (error) {
         next(error);
     }

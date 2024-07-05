@@ -8,8 +8,6 @@ const router = express.Router();
 router.post("/", carController.createCar);
 
 // API - Get Car By ID
-router.get('/:id', (req, res) => {
-    res.send('GET /api/cars/:id');
-  });
-  
+router.get('/:id', carController.getCarById);
+
 export default router;

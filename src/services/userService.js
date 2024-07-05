@@ -6,4 +6,10 @@ const createUser = async (data) => {
   return user;
 };
 
-export default { createUser };
+const editUser = async (_id, data) => {
+  const user = await User.findOneAndUpdate({ _id }, data, { new: true });
+  console.log(user);
+  return user;
+};
+
+export default { createUser, editUser };

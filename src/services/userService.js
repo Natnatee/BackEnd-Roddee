@@ -6,4 +6,10 @@ const createUser = async (data) => {
   return user;
 };
 
-export default { createUser };
+const getUserByEmail = async (email) => {
+  const user = await User.findOne({ Email: email });
+  return user;
+}
+
+
+export default { createUser, getUserByEmail };

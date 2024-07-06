@@ -9,6 +9,7 @@ import helmet from "helmet";
 import userRoutes from "./routes/userRoute.js";
 import carRoutes from "./routes/carRoute.js";
 import temporaryCarRoute from "./routes/temporaryCarRoute.js";
+import transactionRoute from "./routes/transactionRoute.js";
 //Facilitate
 dotenv.config();
 const app = express();
@@ -31,6 +32,7 @@ app.use(limiter);
 app.use("/api/users", userRoutes);
 app.use("/api/cars", carRoutes);
 app.use("/api/temporarycars", temporaryCarRoute);
+app.use("/api/transaction", transactionRoute);
 
 //Handle404
 

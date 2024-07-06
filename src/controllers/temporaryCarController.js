@@ -1,4 +1,4 @@
-import temporaryCarService from "../services/temporaryCarService";
+import temporaryCarService from "../services/temporaryCarService.js";
 
 const getCarById = async (req, res, next) => {
   try {

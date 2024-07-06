@@ -1,4 +1,5 @@
-import TemporaryCar from "../models/temporaryCar";
+import TemporaryCar from "../models/temporaryCar.js";
+
 const getCarById = async (id) => {
   try {
     const car = await TemporaryCar.findById(id); // ใช้ findById เพื่อค้นหารถตาม id

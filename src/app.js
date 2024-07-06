@@ -5,6 +5,8 @@ import connectDB from "./config/database.js";
 import morgan from "morgan";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
+import notfoundMiddleware from './middleware/notfoundMiddleware.js';
+import errorHandlerMiddleware from './middleware/errorMiddleware.js';
 
 import userRoutes from "./routes/userRoute.js";
 import carRoutes from "./routes/carRoute.js";
@@ -35,9 +37,9 @@ app.use("/api/temporarycars", temporaryCarRoute);
 app.use("/api/transaction", transactionRoute);
 
 //Handle404
-
+app.use(notfoundMiddleware)
 //Handle Error
-
+app.use(errorHandlerMiddleware);
 // Connect to database
 connectDB();
 

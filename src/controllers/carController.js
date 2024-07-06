@@ -1,6 +1,5 @@
 import carService from "../services/carService.js";
 
-
 // API - Create Car
 const createCar = async (req, res, next) => {
   try {
@@ -60,51 +59,75 @@ const createCar = async (req, res, next) => {
   }
 };
 
- 
 // API - RANDOM
 
 const randomAllCars = async (req, res, next) => {
-
-        try {
-            
-            const result = await carService.randomCars();
-            res.status(201).json({ message: 'Random car success', result});
-            } catch (error) {
-                next(error);
-            }
-        };
-
+  try {
+    const result = await carService.randomCars();
+    res.status(201).json({ message: "Random car success", result });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const searchCar = async (req, res, next) => {
   try {
     const query = req.body.query;
-    const cars = await carService.searchCar(query);
+    if (query === "") {
+      return { message: "not found" };
+    }
+    const searchQuery = { $or: [] };
+    let searchableFields = [];
+    console.log(typeof query);
+    if (typeof query == "string") {
+      searchableFields = [
+        "headline",
+        "brand",
+        "model",
+        "type",
+        "color",
+        "fuel",
+        "cushion",
+        "gear",
+        "address",
+        "additionalInfo",
+      ];
+      searchableFields.forEach((field) => {
+        searchQuery.$or.push({ [field]: new RegExp(query, "i") });
+      });
+    } else {
+      searchableFields = ["year", "mileage", "enginecap", "seat", "price"];
+      searchableFields.forEach((field) => {
+        searchQuery.$or.push({ [field]: query });
+      });
+    }
+    const cars = await carService.searchCar(searchQuery);
     res.json(cars);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// car lastest 
-const carLastest = async(req,res,next)=>{
-    try {
-        const last = await carService.carLast();
-        res.json(last)
-    } catch (error) {
-        res.status(400).json({message:"i here tu"})
-    }
-}
+// car lastest
+const carLastest = async (req, res, next) => {
+  try {
+    const last = await carService.carLast();
+    res.json(last);
+  } catch (error) {
+    res.status(400).json({ message: "i here tu" });
+  }
+};
 
 // API - Get Car By ID
 const getCarById = async (req, res, next) => {
-    try {
-        const { id } = req.params; //ถ้าอยากเช็คให้
-        console.log(id)
-        const car = await carService.getCarById(id); //carService.getCarById จะไปตามหาค่าที่เราส่งไปขอ
-        res.status(200).json({ message: car });
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const { id } = req.params; //ถ้าอยากเช็คให้
+    console.log(id);
+    const car = await carService.getCarById(id); //carService.getCarById จะไปตามหาค่าที่เราส่งไปขอ
+    res.status(200).json({ message: car });
+  } catch (error) {
+    next(error);
+  }
 };
 
-export { createCar, getCarById, searchCar,carLastest, randomAllCars};
+export { createCar, getCarById, searchCar, carLastest, randomAllCars };

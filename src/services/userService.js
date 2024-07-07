@@ -7,16 +7,13 @@ const createUser = async (data) => {
   return user;
 };
 
-<<<<<<< HEAD
 //API - Forget Password
-const getUserByEmail = async (Email) => {
+const getRecoverByEmail = async (Email) => {
   const emailCheck = await User.findOne({ Email: Email });
   console.log("Email found:", emailCheck);
   return emailCheck;
 };
 
-export default { createUser, getUserByEmail };
-=======
 const getUserByEmail = async (email) => {
   const user = await User.findOne({ Email: email });
   return user;
@@ -41,5 +38,4 @@ const editUser = async (_id, data) => {
   return user;
 };
 
-export default { createUser, getUserByEmail, topPinned, editUser };
->>>>>>> 26f79ae5195ff057bb88fe5936f5cfb5d84178ad
+export default { createUser, getUserByEmail, topPinned, editUser, getRecoverByEmail };

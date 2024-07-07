@@ -101,7 +101,7 @@ const forgetPassword = async (req, res, next) => {
     const { Email } = req.body; 
     
     console.log("Email from request:", Email);
-    const existUser = await userService.getUserByEmail(Email);
+    const existUser = await userService.getRecoverByEmail(Email);
     if (!existUser) {
       return res.status(400).json({ message: "Email not found" });
     }

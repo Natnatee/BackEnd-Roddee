@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import * as userController from "../controllers/userController.js";
 
 const router = express.Router();
@@ -9,5 +9,8 @@ router.post("/register", userController.createUser);
 router.post("/login", userController.login);
 // API OrderPinned
 router.get("/Top-Car", userController.orderPinned)
+
+//API -   Edit
+router.put("/", userController.editUser);
 
 export default router;

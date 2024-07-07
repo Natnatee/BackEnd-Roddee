@@ -7,10 +7,11 @@ const router = express.Router();
 router.post("/register", userController.createUser);
 // API - 2 Login
 router.post("/login", userController.login);
+// API - 3 Verify Email
+router.get("/verify-email", userController.verifyEmail);
 // API OrderPinned
-router.get("/Top-Car", userController.orderPinned)
-
-//API -   Edit
+router.get("/Top-Car", userController.orderPinned);
+// API - Edit
 router.put("/", userController.editUser);
 
 //API - Forget Password

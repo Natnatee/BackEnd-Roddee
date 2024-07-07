@@ -1,7 +1,15 @@
 import userService from "../services/userService.js";
 import { hashPassword, comparePassword } from '../utils/hash.js';
-import { sign } from '../utils/token.js';
+import { sign, verify } from '../utils/token.js';
 import BadRequestError from '../error/BadRequestError.js';
+import formData from 'form-data';
+import Mailgun from 'mailgun.js';
+
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({
+  username: 'api',
+  key: process.env.MAILGUN_API_KEY,
+});
 
 // API - Create User
 const createUser = async (req, res, next) => {
@@ -15,18 +23,60 @@ const createUser = async (req, res, next) => {
     if (!confirmPassword) throw new BadRequestError('Confirm password is required');
     if (!Profile_Image) throw new BadRequestError('Profile image is required');
     // Check if password and confirmPassword match
-    if (Password !== confirmPassword) {throw new BadRequestError('Password does not match');}
+    if (Password !== confirmPassword) { throw new BadRequestError('Password does not match'); }
     // Check if email already exists
     const userCheckMail = await userService.getUserByEmail(Email);
     if (userCheckMail) throw new BadRequestError('Email already exists');
     // Hash password
     const hashedPassword = await hashPassword(Password);
-    // Create user
-    const newUser = await userService.createUser({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin:false, pinned, pnumber });
-    // Generate token
-    const token = sign({ id: newUser.id });
+    // Generate token with user data
+    const token = sign({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin: false, pinned, pnumber });
 
-    res.status(201).json({ message: "Create User", data: newUser, access_token: token });
+    // Send verification email using Mailgun
+    const mailOptions = {
+      from: 'natnatee_mond@hotmail.com', // Replace with your email address
+      to: Email,
+      subject: 'Email Verification',
+      html: `<p>Please verify your email by clicking the link below:</p>
+             <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
+    };
+
+    mg.messages.create(process.env.MAILGUN_DOMAIN, mailOptions)
+      .then((body) => {
+        console.log('Email sent:', body);
+        res.status(201).json({ message: "Verification email sent" });
+      })
+      .catch((error) => {
+        console.error('Error sending email:', error);
+        throw new Error('Failed to send verification email');
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// API : Verify Email
+const verifyEmail = async (req, res, next) => {
+  try {
+    const { token } = req.query;
+    const decoded = verify(token);
+
+    if (!decoded) {
+      throw new BadRequestError('Invalid token');
+    }
+
+    const { FirstName, LastName, Email, Password, Profile_Image, isAdmin, pinned, pnumber } = decoded;
+
+    // Check if email already exists
+    const userCheckMail = await userService.getUserByEmail(Email);
+    if (userCheckMail) throw new BadRequestError('Email already exists');
+
+    // Create user
+    const newUser = await userService.createUser({ FirstName, LastName, Email, Password, Profile_Image, isAdmin, pinned, pnumber });
+
+    // Generate a new token to be used for authentication
+    const newToken = sign({ id: newUser.id });
+    res.status(200).json({ access_token: newToken });
   } catch (error) {
     next(error);
   }
@@ -62,7 +112,6 @@ const orderPinned = async (req, res, next) => {
     next(error);
   }
 }
-
 
 const editUser = async (req, res, next) => {
   try {
@@ -120,7 +169,7 @@ const forgetPassword = async (req, res, next) => {
   }
 };
 
-export { createUser, editUser, login, orderPinned, forgetPassword };
+export { createUser, verifyEmail, editUser, login, orderPinned, forgetPassword };
   
 
 

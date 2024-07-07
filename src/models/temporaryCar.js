@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const carSchema = new mongoose.Schema({
+const temporaryCarSchema = new mongoose.Schema({
   headline: {
     type: String,
     required: true,
@@ -128,6 +128,10 @@ const carSchema = new mongoose.Schema({
   createOn: { type: Date, default: new Date().getTime() },
 });
 
-const Car = mongoose.model("Car", carSchema, "Cars");
+const TemporaryCar = mongoose.model(
+  "TemporaryCar",
+  temporaryCarSchema,
+  "TemporaryCars"
+);
 
-export default Car;
+export default TemporaryCar;

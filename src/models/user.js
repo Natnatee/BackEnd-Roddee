@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  pnumber: {
+    type: String,
+    required: true,
+  },
   Profile_Image: {
     type: String,
     default: "False",

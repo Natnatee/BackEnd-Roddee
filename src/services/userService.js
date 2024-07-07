@@ -1,9 +1,17 @@
 import User from "../models/user.js";
 
+//API - Register
 const createUser = async (data) => {
   const user = new User(data);
   await user.save();
   return user;
+};
+
+//API - Forget Password
+const getRecoverByEmail = async (Email) => {
+  const emailCheck = await User.findOne({ Email: Email });
+  console.log("Email found:", emailCheck);
+  return emailCheck;
 };
 
 const getUserByEmail = async (email) => {
@@ -30,4 +38,4 @@ const editUser = async (_id, data) => {
   return user;
 };
 
-export default { createUser, getUserByEmail, topPinned, editUser };
+export default { createUser, getUserByEmail, topPinned, editUser, getRecoverByEmail };

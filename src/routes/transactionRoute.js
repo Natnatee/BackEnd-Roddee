@@ -5,4 +5,7 @@ const router = express.Router();
 
 router.delete("/:id", transactionControl.deleteTransaction);
 
+// buy
+router.post("/", transactionControl.addTransaction);
+
 export default router;

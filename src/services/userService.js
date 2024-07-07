@@ -1,5 +1,6 @@
 import User from "../models/user.js";
 
+
 //API - Register
 const createUser = async (data) => {
   const user = new User(data);

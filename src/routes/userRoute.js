@@ -7,5 +7,7 @@ const router = express.Router();
 router.post("/register", userController.createUser);
 // API - 2 Login
 router.post("/login", userController.login);
+// API OrderPinned
+router.get("/Top-Car", userController.orderPinned)
 
 export default router;

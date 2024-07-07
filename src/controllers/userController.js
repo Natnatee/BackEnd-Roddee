@@ -6,7 +6,7 @@ import BadRequestError from '../error/BadRequestError.js';
 // API - Create User
 const createUser = async (req, res, next) => {
   try {
-    const { FirstName, LastName, Email, Password, Profile_Image, pinned, confirmPassword } = req.body;
+    const { FirstName, LastName, Email, Password, pnumber, Profile_Image, pinned, confirmPassword } = req.body;
     // Validate required fields
     if (!FirstName) throw new BadRequestError('First name is required');
     if (!LastName) throw new BadRequestError('Last name is required');
@@ -22,7 +22,7 @@ const createUser = async (req, res, next) => {
     // Hash password
     const hashedPassword = await hashPassword(Password);
     // Create user
-    const newUser = await userService.createUser({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin:false, pinned });
+    const newUser = await userService.createUser({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin:false, pinned, pnumber });
     // Generate token
     const token = sign({ id: newUser.id });
 
@@ -52,5 +52,16 @@ const login = async (req, res, next) => {
   }
 };
 
+//API : orderPinned
+const orderPinned = async (req, res, next) => {
+  try {
+    const Order = await userService.topPinned();
+    const newOrder = Order.map(order => order._id);
+    res.status(200).json({ data: newOrder });
+  } catch (error) {
+    next(error);
+  }
+}
 
-export { createUser, login };
+
+export { createUser, login, orderPinned };

@@ -27,6 +27,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // > Static Files
+app.use(express.static('public'));
 
 // Routes
 app.use('/api/users', userRoutes);

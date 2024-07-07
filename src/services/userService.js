@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import NotFoundError from "../error/NotFoundError.js";
 
 //API - Register
 const createUser = async (data) => {
@@ -47,6 +48,22 @@ const profileID = async(user_id)=>{
 const profile = async()=>{
   const view = await User.find()
   return view
-}
+};
 
-export default { createUser,profileID,profile,getUserByEmail, topPinned, editUser, getRecoverByEmail };
+const delectcarlist = async(id,pinnedIndex)=>{
+  try {
+    const user_id = await User.findById(id)
+    if(!user_id){
+      throw new NotFoundError("User Not found")
+    }
+    user_id.pinned.splice(pinnedIndex,1)
+    await user_id.save()
+    return user_id
+  } catch (error) {
+    next(error)
+  }
+   
+
+} 
+
+export default { createUser,profileID,profile,getUserByEmail, topPinned, editUser, getRecoverByEmail,delectcarlist };

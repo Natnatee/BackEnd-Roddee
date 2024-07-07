@@ -7,4 +7,9 @@ const deleteTransaction = async (idObject) => {
   console.log(result);
   return result;
 };
-export default { deleteTransaction };
+
+const updateTransaction = async(id,updateData)=>{
+  const result = await Transaction.findByIdAndUpdate(id,updateData,{ new: true })
+  return result
+}
+export default { deleteTransaction,updateTransaction};

@@ -17,10 +17,13 @@ router.put("/", userController.editUser);
 router.post("/password", userController.forgetPassword);
 
 // Api -get profile by id 
-router.get("/profile/:id",userContriller.viewprofilebyID)
+router.get("/profile/:id",userController.viewprofilebyID)
 
 // api get profile all 
-router.get("/profile",userContriller.viewprofile)
+router.get("/profile",userController.viewprofile)
+
+// api delect cat fav 
+router.delete("/delete/:id/:pinnedIndex",userController.deleteFav)
 
 
 export default router;

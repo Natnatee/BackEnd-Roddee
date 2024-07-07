@@ -7,8 +7,7 @@ import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 import notfoundMiddleware from './middleware/notfoundMiddleware.js';
 import errorHandlerMiddleware from './middleware/errorMiddleware.js';
-
-import userRoutes from "./routes/userRoutes.js";
+import userRoutes from "./routes/userRoute.js";
 import carRoutes from "./routes/carRoute.js";
 import temporaryCarRoute from "./routes/temporaryCarRoute.js";
 import transactionRoute from "./routes/transactionRoute.js";

@@ -120,40 +120,7 @@ const forgetPassword = async (req, res, next) => {
   }
 };
 
-export { createUser, editUser, login, orderPinned, forgetPassword };
-  
-
-
-
-
-
-    try {
-      const {
-        FirstName,
-        LastName,
-        Email,
-        Password,
-        Profile_Image,
-        isAdmin,
-        pinned,
-      } = req.body;
-      const data = {
-        FirstName,
-        LastName,
-        Email,
-        Password,
-        Profile_Image,
-        isAdmin,
-        pinned,
-      };
-      const user = await userService.createUser(data);
-  
-      res.status(201).json({ message: "Create User", data: user });
-    } catch (error) {
-      next(error);
-    }
-  };
-
+// user profile 
   const viewprofilebyID = async(req,res,next)=>{
     try {
       const user_id = req.params.id
@@ -174,6 +141,18 @@ export { createUser, editUser, login, orderPinned, forgetPassword };
     } catch (error) {
       res.status(400).json({message:"error viewprofile"})
     }
+  };
+
+  // delete fav
+  const deleteFav = async(req,res,next)=>{
+    try {
+      const user_id = req.params.id
+      const pinnedIndex = req.params.pinnedArray   
+      const delect = await userService.delectcarlist(user_id,pinnedIndex)
+      res.status(400).json({message:"pass",delect})
+    } catch (error) {
+      next(error)
+    }
   }
   
-export { createUser,viewprofilebyID,viewprofile };
+export { createUser,viewprofilebyID,viewprofile, editUser, login, orderPinned, forgetPassword,deleteFav};

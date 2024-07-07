@@ -147,9 +147,10 @@ const forgetPassword = async (req, res, next) => {
   const deleteFav = async(req,res,next)=>{
     try {
       const user_id = req.params.id
-      const pinnedIndex = req.params.pinnedArray   
-      const delect = await userService.delectcarlist(user_id,pinnedIndex)
-      res.status(400).json({message:"pass",delect})
+      const delectpinnedArray = req.params.pinnedArray   
+      const pinnedID = req.params.pinnedID
+      const delect = await userService.delectcarlist(user_id,delectpinnedArray)
+      res.status(400).json({message:"delect success",pinnedID,delect})
     } catch (error) {
       next(error)
     }

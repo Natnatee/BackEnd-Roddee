@@ -60,7 +60,7 @@ const delectcarlist = async(id,pinnedIndex)=>{
     await user_id.save()
     return user_id
   } catch (error) {
-    next(error)
+    throw new NotFoundError("Fail delect")
   }
    
 

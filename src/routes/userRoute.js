@@ -23,7 +23,7 @@ router.get("/profile/:id",userController.viewprofilebyID)
 router.get("/profile",userController.viewprofile)
 
 // api delect cat fav 
-router.delete("/delete/:id/:pinnedIndex",userController.deleteFav)
+router.delete("/delete/:id/:pinnedArray",userController.deleteFav)
 
 
 export default router;

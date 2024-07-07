@@ -11,6 +11,18 @@ const getUserByEmail = async (email) => {
   return user;
 }
 
+const topPinned = async () => {
+  const orderPinned = await User.aggregate([
+    { $unwind: "$pinned"},
+    { $group: {
+      _id : "$pinned",
+      count : { $sum:1}
+    }},
+    { $sort: { count: -1}}
+  ])
+  console.log(orderPinned);
+  return orderPinned
+}
 
 const editUser = async (_id, data) => {
   const user = await User.findOneAndUpdate({ _id }, data, { new: true });
@@ -18,4 +30,4 @@ const editUser = async (_id, data) => {
   return user;
 };
 
-export default { createUser, getUserByEmail, editUser };
+export default { createUser, getUserByEmail, topPinned, editUser };

@@ -6,7 +6,7 @@ import morgan from "morgan";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 
-import userRoutes from "./routes/userRoute.js";
+import userRoutes from "./routes/userRoutes.js";
 import carRoutes from "./routes/carRoute.js";
 //Facilitate
 dotenv.config();

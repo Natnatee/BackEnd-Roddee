@@ -1,5 +1,6 @@
 import express from 'express';
 import User from '../models/user.js';
+import * as userContriller from "../controllers/userController.js"
 
 const router = express.Router();
 
@@ -28,5 +29,11 @@ router.post('/', async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
+
+// Api -get profile by id 
+router.get("/profile/:id",userContriller.viewprofilebyID)
+
+// api get profile all 
+router.get("/profile",userContriller.viewprofile)
 
 export default router;

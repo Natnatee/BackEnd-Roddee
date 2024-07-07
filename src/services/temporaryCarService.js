@@ -10,4 +10,13 @@ const getCarById = async (id) => {
   }
 };
 
-export default { getCarById };
+const deleteCarById = async (idObject) => {
+  const id = idObject.id;
+  console.log("sending id:", id);
+  const result = await TemporaryCar.findByIdAndDelete(id);
+  console.log(result);
+  return result;
+};
+
+
+export default { getCarById, deleteCarById };

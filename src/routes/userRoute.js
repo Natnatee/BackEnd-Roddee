@@ -14,4 +14,8 @@ router.get("/Top-Car", userController.orderPinned);
 // API - Edit
 router.put("/", userController.editUser);
 
+//API - Forget Password
+router.post("/password", userController.forgetPassword);
+
+
 export default router;

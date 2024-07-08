@@ -50,13 +50,16 @@ const profile = async()=>{
   return view
 };
 
-const delectcarlist = async(id,pinnedIndex)=>{
+const delectcarlist = async(id,pinnedArray)=>{
   try {
     const user_id = await User.findById(id)
     if(!user_id){
       throw new NotFoundError("User Not found")
     }
-    user_id.pinned.splice(pinnedIndex,1)
+    console.log(pinnedArray);
+    const index = user_id.pinned.indexOf(pinnedArray);
+    console.log(index);
+    user_id.pinned.splice(index,1)
     await user_id.save()
     return user_id
   } catch (error) {

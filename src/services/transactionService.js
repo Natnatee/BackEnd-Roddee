@@ -15,10 +15,10 @@ const createTransaction = async ({Product_Id, Purchase_User}) => {
 
   const car = await Car.findById(Product_Id);
   
-  const buyer = await User.findById(Purchase_User);
-  if (!buyer) {
-    return res.status(404).json({ message: "Buyer not found" });
-  }
+  // const buyer = await User.findById(Purchase_User);
+  // if (!buyer) {
+  //   return res.status(404).json({ message: "Buyer not found" });
+  // }
 
   const purchasePriceWithMarkup = car.price * 1.10;
     
@@ -32,7 +32,7 @@ const createTransaction = async ({Product_Id, Purchase_User}) => {
       Purchase_User,
       // Seller_User: car.Seller_User,  // ยังไม่มี seller user ใน car schema
     });
-  await transaction.save();
+  // await transaction.save();
   return transaction;
 };
 

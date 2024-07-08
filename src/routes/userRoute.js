@@ -17,4 +17,12 @@ router.put("/", userController.editUser);
 router.post("/password", userController.forgetPassword);
 
 
+//API - Add favourite car
+// router.post("/:id/:pinnedID",userController.deleteFav)
+
+// API - 8  Add movie to movie list
+// router.post('/:movieListId/movies/:movieId', movieListController.addMovieToMovieList);
+
+
+
 export default router;

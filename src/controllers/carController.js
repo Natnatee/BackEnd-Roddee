@@ -103,13 +103,10 @@ const getCarById = async (req, res, next) => {
 };
 
 const carBrand = async (req, res, next) => {
-  const { brand } = req.params;
   try {
-    const car = await carService.carBrand(brand); // เปลี่ยนจาก Number(brand) เป็น brand
-    if (!car) {
-      return res.status(404).json({ message: 'Car Brand not found' });
-    }
-    res.status(200).json({ message: 'Car Brand', data: car });
+    const { brand } = req.params; //ถ้าอยากเช็คให้
+    const car = await carService.carBrand(brand);
+    res.status(200).json({ message: car });
   } catch (error) {
     next(error);
   }

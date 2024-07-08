@@ -26,7 +26,7 @@ const searchCar = async (query) => {
   if (query === "") {
     return { message: "not found" };
   }
-const searchQuery = { $or: [] };
+  const searchQuery = { $or: [] };
   let searchableFields = [];
   console.log(typeof query);
   if (typeof query == "string") {
@@ -70,10 +70,10 @@ const carLast = async () => {
   return lastest;
 };
 
-const carBrand = async (brand) => { // ฟังก์ชัน asynchronous เพื่อค้นหา car ตาม brand
-  return await Car.findOne({ brand }); // ค้นหา car ที่มี brand ตรงกับค่าที่ส่งเข้ามา
+const carBrand = async (brand) => {
+  // ฟังก์ชัน asynchronous เพื่อค้นหา car ตาม brand
+  return await Car.find({ brand }); // ค้นหา car ที่มี brand ตรงกับค่าที่ส่งเข้ามา
 };
-
 
 export default {
   createCar,

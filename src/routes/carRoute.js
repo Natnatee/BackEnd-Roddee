@@ -1,7 +1,6 @@
 import express from "express";
 import * as carController from "../controllers/carController.js";
 
-
 const router = express.Router();
 
 // API - 1 Post
@@ -14,16 +13,13 @@ router.get("/car-random", carController.randomAllCars);
 router.get("/Car-New", carController.carLastest);
 
 // API - SearchCar
-router.get("/searchbar", carController.searchCar);
-router.post("/", carController.createCar);
+router.post("/searchbar", carController.searchCar);
 
 // API - Get Car By ID
-router.get('/:id', carController.getCarById);
+router.get("/:id", carController.getCarById);
 
 // API - Get Car By Brand
 router.get('/brand/:brand', carController.carBrand); // สร้าง route เพื่อจัดการคำขอ GET ที่ path /brand/:brand และเรียกใช้ฟังก์ชัน carBrand จาก controller
 
 
 export default router;
-
-

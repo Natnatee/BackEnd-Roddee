@@ -1,14 +1,47 @@
 import User from "../models/user.js";
 
+
+//API - Register
 const createUser = async (data) => {
   const user = new User(data);
   await user.save();
   return user;
 };
 
-const deleteUserEmail = async (profile) => { // ฟังก์ชัน asynchronous เพื่อลบ user
-  const user = await User.findOneAndDelete({ Email: profile }); // ใช้ findOneAndDelete เพื่อลบ user ตาม Email
+//API - Forget Password
+const getRecoverByEmail = async (Email) => {
+  const emailCheck = await User.findOne({ Email: Email });
+  console.log("Email found:", emailCheck);
+  return emailCheck;
+};
+
+const getUserByEmail = async (email) => {
+  const user = await User.findOne({ Email: email });
+  return user;
+}
+
+const topPinned = async () => {
+  const orderPinned = await User.aggregate([
+    { $unwind: "$pinned"},
+    { $group: {
+      _id : "$pinned",
+      count : { $sum:1}
+    }},
+    { $sort: { count: -1}}
+  ])
+  console.log(orderPinned);
+  return orderPinned
+}
+
+const editUser = async (_id, data) => {
+  const user = await User.findOneAndUpdate({ _id }, data, { new: true });
+  console.log(user);
+  return user;
+};
+
+const deleteUserEmail = async (email) => { // ฟังก์ชัน asynchronous เพื่อลบ user
+  const user = await User.findOneAndDelete({ Email: email }); // ใช้ findOneAndDelete เพื่อลบ user ตาม Email
   return user; // ส่งคืน user ที่ลบ
 };
 
-export default { createUser, deleteUserEmail };
+export default { createUser, getUserByEmail, topPinned, editUser, getRecoverByEmail, deleteUserEmail };

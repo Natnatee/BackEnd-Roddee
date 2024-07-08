@@ -1,0 +1,47 @@
+import mongoose from "mongoose";
+
+const transactionSchema = new mongoose.Schema({
+  Product_Id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Car",
+  },
+  Sell_Price: {
+    type: Number,
+    required: true,
+  },
+  Purchase_Price: {
+    type: Number,
+    required: true,
+  },
+  Sell_Date: {
+    type: Date,
+    required: true,
+  },
+  Purchase_Date: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
+  Promotion: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  Purchase_User: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User", // Assuming there is a User model
+  },
+  Seller_User: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User", // Assuming there is a User model
+  },
+});
+
+const Transaction = mongoose.model("Transaction", transactionSchema);
+
+export default Transaction;
+
+// createOn: { type: Date, default: new Date().getTime() },

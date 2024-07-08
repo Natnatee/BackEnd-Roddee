@@ -60,6 +60,7 @@ const createCar = async (req, res, next) => {
   }
 };
 
+
 // API - RANDOM
 
 const randomAllCars = async (req, res, next) => {
@@ -74,7 +75,35 @@ const randomAllCars = async (req, res, next) => {
 const searchCar = async (req, res, next) => {
   try {
     const query = req.body.query;
-    const cars = await carService.searchCar(query);
+    if (query === "") {
+      return { message: "not found" };
+    }
+    const searchQuery = { $or: [] };
+    let searchableFields = [];
+    console.log(typeof query);
+    if (typeof query == "string") {
+      searchableFields = [
+        "headline",
+        "brand",
+        "model",
+        "type",
+        "color",
+        "fuel",
+        "cushion",
+        "gear",
+        "address",
+        "additionalInfo",
+      ];
+      searchableFields.forEach((field) => {
+        searchQuery.$or.push({ [field]: new RegExp(query, "i") });
+      });
+    } else {
+      searchableFields = ["year", "mileage", "enginecap", "seat", "price"];
+      searchableFields.forEach((field) => {
+        searchQuery.$or.push({ [field]: query });
+      });
+    }
+    const cars = await carService.searchCar(searchQuery);
     res.json(cars);
   } catch (error) {
     res.status(500).json({ message: error.message });

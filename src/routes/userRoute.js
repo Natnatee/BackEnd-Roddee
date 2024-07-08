@@ -18,4 +18,8 @@ router.put("/", userController.editUser);
 router.post("/password", userController.forgetPassword);
 
 
+
+// API - SoftDelete
+router.delete("/:email", userController.deleteUserEmail);
+
 export default router;

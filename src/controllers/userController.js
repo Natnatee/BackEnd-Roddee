@@ -169,10 +169,9 @@ const forgetPassword = async (req, res, next) => {
   }
 };
 
-export { createUser, verifyEmail, editUser, login, orderPinned, forgetPassword };
-  
 
+const deleteUserEmail = async (req, res, next) => {
+  res.send('DELETE /api/users/:email');
+};
 
-
-
-
+export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword };

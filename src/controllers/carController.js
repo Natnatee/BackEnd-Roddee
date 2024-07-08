@@ -1,3 +1,4 @@
+import Car from "../models/Car.js";
 import carService from "../services/carService.js";
 
 // API - Create Car
@@ -58,6 +59,7 @@ const createCar = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // API - RANDOM
 
@@ -122,12 +124,29 @@ const carLastest = async (req, res, next) => {
 const getCarById = async (req, res, next) => {
   try {
     const { id } = req.params; //ถ้าอยากเช็คให้
-    console.log(id);
-    const car = await carService.getCarById(id); //carService.getCarById จะไปตามหาค่าที่เราส่งไปขอ
+    const car = await carService.getCarById(id);
     res.status(200).json({ message: car });
   } catch (error) {
     next(error);
   }
 };
 
-export { createCar, getCarById, searchCar, carLastest, randomAllCars };
+const carBrand = async (req, res, next) => {
+  try {
+    const { brand } = req.params; //ถ้าอยากเช็คให้
+    const car = await carService.carBrand(brand);
+    res.status(200).json({ message: car });
+  } catch (error) {
+    next(error);
+  }
+};
+
+  
+export {
+  createCar,
+  getCarById,
+  searchCar,
+  carLastest,
+  randomAllCars,
+  carBrand,
+};

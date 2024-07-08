@@ -34,4 +34,16 @@ const carLast = async () => {
   return lastest;
 };
 
-export default { createCar, carLast, searchCar, randomCars, getCarById };
+const carBrand = async (brand) => {
+  // ฟังก์ชัน asynchronous เพื่อค้นหา car ตาม brand
+  return await Car.find({ brand }); // ค้นหา car ที่มี brand ตรงกับค่าที่ส่งเข้ามา
+};
+
+export default {
+  createCar,
+  carLast,
+  searchCar,
+  randomCars,
+  getCarById,
+  carBrand,
+};

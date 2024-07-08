@@ -1,4 +1,5 @@
 import temporaryCarService from "../services/temporaryCarService.js";
+import NotFoundError from "../error/NotFoundError.js";
 
 const getCarById = async (req, res, next) => {
   try {
@@ -11,4 +12,73 @@ const getCarById = async (req, res, next) => {
   }
 };
 
-export default { getCarById };
+//delete car temp
+const deleteCarById = async (req, res, next) => {
+  const id = req.params;
+  console.log("id at control", id);
+  const result = await temporaryCarService.deleteCarById(id);
+  res.status(200).json({ message: "delete car complete", data: result });
+};
+
+// post car temp
+const postCar = async(req,res,next)=>{
+ try {
+  const {
+    headline,
+    brand,
+    model,
+    type,
+    year,
+    mileage,
+    color,
+    fuel,
+    enginecap,
+    cushion,
+    seat,
+    gear,
+    price,
+    pnumber,
+    address,
+    additionalInfo,
+    file1,
+    file2,
+    file3,
+    file4,
+    file5,
+    file6,
+  } = req.body;
+  if (!headline || !brand || !model || !type || !year || !mileage || !color || !fuel || !enginecap 
+    || !cushion || !seat || !gear || !price || !pnumber || !address||!additionalInfo||!file1||!file2||!file3||!file4||!file5||!file6) {
+    return res.status(400).json({message: "ALL required"});
+  }
+  const carTem = await temporaryCarService.createCartem({
+    headline,
+    brand,
+    model,
+    type,
+    year,
+    mileage,
+    color,
+    fuel,
+    enginecap,
+    cushion,
+    seat,
+    gear,
+    price,
+    pnumber,
+    address,
+    additionalInfo,
+    file1,
+    file2,
+    file3,
+    file4,
+    file5,
+    file6,
+ })
+  res.status(200).json(carTem)
+ } catch (error) {
+  next(error)
+ }
+}
+
+export default { getCarById, deleteCarById,postCar };

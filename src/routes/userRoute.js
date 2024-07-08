@@ -7,8 +7,28 @@ const router = express.Router();
 router.post("/register", userController.createUser);
 // API - 2 Login
 router.post("/login", userController.login);
-
-//API -   Edit
+// API - 3 Verify Email
+router.get("/verify-email", userController.verifyEmail);
+// API OrderPinned
+router.get("/Top-Car", userController.orderPinned);
+// API - Edit
 router.put("/", userController.editUser);
+
+//API - Forget Password
+router.post("/password", userController.forgetPassword);
+
+// Api -get profile by id 
+router.get("/profile/:id",userController.viewprofilebyID)
+
+// api get profile all 
+router.get("/profile",userController.viewprofile)
+
+// api delect cat fav 
+router.delete("/delete/:id/:pinnedID",userController.deleteFav)
+
+
+
+// API - SoftDelete
+router.delete("/:email", userController.deleteUserEmail);
 
 export default router;

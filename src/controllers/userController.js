@@ -1,12 +1,20 @@
 import userService from "../services/userService.js";
 import { hashPassword, comparePassword } from '../utils/hash.js';
-import { sign } from '../utils/token.js';
+import { sign, verify } from '../utils/token.js';
 import BadRequestError from '../error/BadRequestError.js';
+import formData from 'form-data';
+import Mailgun from 'mailgun.js';
+
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({
+  username: 'api',
+  key: process.env.MAILGUN_API_KEY,
+});
 
 // API - Create User
 const createUser = async (req, res, next) => {
   try {
-    const { FirstName, LastName, Email, Password, Profile_Image, pinned, confirmPassword } = req.body;
+    const { FirstName, LastName, Email, Password, pnumber, Profile_Image, pinned, confirmPassword } = req.body;
     // Validate required fields
     if (!FirstName) throw new BadRequestError('First name is required');
     if (!LastName) throw new BadRequestError('Last name is required');
@@ -15,18 +23,60 @@ const createUser = async (req, res, next) => {
     if (!confirmPassword) throw new BadRequestError('Confirm password is required');
     if (!Profile_Image) throw new BadRequestError('Profile image is required');
     // Check if password and confirmPassword match
-    if (Password !== confirmPassword) {throw new BadRequestError('Password does not match');}
+    if (Password !== confirmPassword) { throw new BadRequestError('Password does not match'); }
     // Check if email already exists
     const userCheckMail = await userService.getUserByEmail(Email);
     if (userCheckMail) throw new BadRequestError('Email already exists');
     // Hash password
     const hashedPassword = await hashPassword(Password);
-    // Create user
-    const newUser = await userService.createUser({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin:false, pinned });
-    // Generate token
-    const token = sign({ id: newUser.id });
+    // Generate token with user data
+    const token = sign({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin: false, pinned, pnumber });
 
-    res.status(201).json({ message: "Create User", data: newUser, access_token: token });
+    // Send verification email using Mailgun
+    const mailOptions = {
+      from: 'natnatee_mond@hotmail.com', // Replace with your email address
+      to: Email,
+      subject: 'Email Verification',
+      html: `<p>Please verify your email by clicking the link below:</p>
+             <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
+    };
+
+    mg.messages.create(process.env.MAILGUN_DOMAIN, mailOptions)
+      .then((body) => {
+        console.log('Email sent:', body);
+        res.status(201).json({ message: "Verification email sent" });
+      })
+      .catch((error) => {
+        console.error('Error sending email:', error);
+        throw new Error('Failed to send verification email');
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// API : Verify Email
+const verifyEmail = async (req, res, next) => {
+  try {
+    const { token } = req.query;
+    const decoded = verify(token);
+
+    if (!decoded) {
+      throw new BadRequestError('Invalid token');
+    }
+
+    const { FirstName, LastName, Email, Password, Profile_Image, isAdmin, pinned, pnumber } = decoded;
+
+    // Check if email already exists
+    const userCheckMail = await userService.getUserByEmail(Email);
+    if (userCheckMail) throw new BadRequestError('Email already exists');
+
+    // Create user
+    const newUser = await userService.createUser({ FirstName, LastName, Email, Password, Profile_Image, isAdmin, pinned, pnumber });
+
+    // Generate a new token to be used for authentication
+    const newToken = sign({ id: newUser.id });
+    res.status(200).json({ access_token: newToken });
   } catch (error) {
     next(error);
   }
@@ -52,6 +102,16 @@ const login = async (req, res, next) => {
   }
 };
 
+//API : orderPinned
+const orderPinned = async (req, res, next) => {
+  try {
+    const Order = await userService.topPinned();
+    const newOrder = Order.map(order => order._id);
+    res.status(200).json({ data: newOrder });
+  } catch (error) {
+    next(error);
+  }
+}
 
 const editUser = async (req, res, next) => {
   try {
@@ -83,4 +143,72 @@ const editUser = async (req, res, next) => {
   }
 };
 
-export { createUser, editUser, login };
+// API - Forget Password
+const forgetPassword = async (req, res, next) => {
+  try {
+    
+    const { Email } = req.body; 
+    
+    console.log("Email from request:", Email);
+    const existUser = await userService.getRecoverByEmail(Email);
+    if (!existUser) {
+      return res.status(400).json({ message: "Email not found" });
+    }
+   
+    res.status(201).json({
+      message: "Send User ID Success",
+      data: Email,
+      userId: existUser._id 
+    });
+
+    // const newPassword = await userService.forgetUser(id);
+    // res.status(201).json({ message: "Password send to email" });
+    // res.status(201).json({ message: "Password send to email", data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// user profile 
+  const viewprofilebyID = async(req,res,next)=>{
+    try {
+      const user_id = req.params.id
+      const viewid =await userService.profileID(user_id)
+      if(!viewid){
+        res.status(404).json({message:"Not found user"})
+      }
+     res.status(200).json(viewid)
+    } catch (error) {
+      res.status(400).json({message:"ดูดีๆ"})
+    }
+  };
+
+  const viewprofile = async(req,res,next)=>{
+    try {
+      const viewall = await userService.profile()
+      res.status(201).json(viewall)
+    } catch (error) {
+      res.status(400).json({message:"error viewprofile"})
+    }
+  };
+
+  // delete fav
+  const deleteFav = async(req,res,next)=>{
+    try {
+      const user_id = req.params.id
+      const delectpinnedArray = req.params.pinnedID  
+      const pinnedID = req.params.pinnedID
+      const delect = await userService.delectcarlist(user_id,delectpinnedArray)
+      res.status(400).json({message:"delect success",pinnedID,delect})
+    } catch (error) {
+      next(error)
+    }
+  }
+  
+
+
+const deleteUserEmail = async (req, res, next) => {
+  res.send('DELETE /api/users/:email');
+};
+
+export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav };

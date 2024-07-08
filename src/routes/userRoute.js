@@ -19,5 +19,18 @@ router.put("/", userController.editUser);
 //API - Forget Password
 router.post("/password", userController.forgetPassword);
 
+// Api -get profile by id 
+router.get("/profile/:id",userController.viewprofilebyID)
+
+// api get profile all 
+router.get("/profile",userController.viewprofile)
+
+// api delect cat fav 
+router.delete("/delete/:id/:pinnedID",userController.deleteFav)
+
+
+
+// API - SoftDelete
+router.delete("/:email", userController.deleteUserEmail);
 
 export default router;

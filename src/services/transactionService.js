@@ -39,4 +39,8 @@ const createTransaction = async ({Product_Id, Purchase_User}) => {
 
 
 
-export default { deleteTransaction, createTransaction };
+const updateTransaction = async(id,updateData)=>{
+  const result = await Transaction.findByIdAndUpdate(id,updateData,{ new: true })
+  return result
+}
+export default { deleteTransaction,updateTransaction, createTransaction };

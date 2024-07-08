@@ -102,6 +102,35 @@ const login = async (req, res, next) => {
   }
 };
 
+// API - Create User
+const createUserForAdmin = async (req, res, next) => {
+  try {
+    const { FirstName, LastName, Email, Password, pnumber, Profile_Image, pinned, confirmPassword } = req.body;
+    // Validate required fields
+    if (!FirstName) throw new BadRequestError('First name is required');
+    if (!LastName) throw new BadRequestError('Last name is required');
+    if (!Email) throw new BadRequestError('Email is required');
+    if (!Password) throw new BadRequestError('Password is required');
+    if (!confirmPassword) throw new BadRequestError('Confirm password is required');
+    if (!Profile_Image) throw new BadRequestError('Profile image is required');
+    // Check if password and confirmPassword match
+    if (Password !== confirmPassword) {throw new BadRequestError('Password does not match');}
+    // Check if email already exists
+    const userCheckMail = await userService.getUserByEmail(Email);
+    if (userCheckMail) throw new BadRequestError('Email already exists');
+    // Hash password
+    const hashedPassword = await hashPassword(Password);
+    // Create user
+    const newUser = await userService.createUser({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin:false, pinned, pnumber });
+    // Generate token
+    const token = sign({ id: newUser.id });
+
+    res.status(201).json({ message: "Create User", data: newUser, access_token: token });
+  } catch (error) {
+    next(error);
+  }
+};
+
 //API : orderPinned
 const orderPinned = async (req, res, next) => {
   try {
@@ -211,4 +240,4 @@ const deleteUserEmail = async (req, res, next) => {
   res.send('DELETE /api/users/:email');
 };
 
-export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav };
+export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav, createUserForAdmin};

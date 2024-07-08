@@ -39,6 +39,11 @@ const editUser = async (_id, data) => {
   return user;
 };
 
+const deleteUserEmail = async (email) => { // ฟังก์ชัน asynchronous เพื่อลบ user
+  const user = await User.findOneAndDelete({ Email: email }); // ใช้ findOneAndDelete เพื่อลบ user ตาม Email
+  return user; // ส่งคืน user ที่ลบ
+};
+
 
 const profileID = async(user_id)=>{
   const viewid = await User.findOne({_id:user_id})
@@ -69,4 +74,4 @@ const delectcarlist = async(id,pinnedArray)=>{
 
 } 
 
-export default { createUser,profileID,profile,getUserByEmail, topPinned, editUser, getRecoverByEmail,delectcarlist };
+export default { createUser,profileID,profile,getUserByEmail, topPinned, editUser, getRecoverByEmail, deleteUserEmail,delectcarlist };

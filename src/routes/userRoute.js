@@ -7,10 +7,11 @@ const router = express.Router();
 router.post("/register", userController.createUser);
 // API - 2 Login
 router.post("/login", userController.login);
+// API - 3 Verify Email
+router.get("/verify-email", userController.verifyEmail);
 // API OrderPinned
-router.get("/Top-Car", userController.orderPinned)
-
-//API -   Edit
+router.get("/Top-Car", userController.orderPinned);
+// API - Edit
 router.put("/", userController.editUser);
 
 //API - Forget Password
@@ -25,5 +26,9 @@ router.get("/profile",userController.viewprofile)
 // api delect cat fav 
 router.delete("/delete/:id/:pinnedID",userController.deleteFav)
 
+
+
+// API - SoftDelete
+router.delete("/:email", userController.deleteUserEmail);
 
 export default router;

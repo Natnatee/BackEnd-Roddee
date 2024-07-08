@@ -18,5 +18,11 @@ const deleteCarById = async (idObject) => {
   return result;
 };
 
+const createCartem = async(data)=>{
+  const carTem = new TemporaryCar(data)
+  await  carTem.save()
+  return carTem
+}
 
-export default { getCarById, deleteCarById };
+
+export default { getCarById, deleteCarById,createCartem };

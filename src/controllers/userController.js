@@ -169,9 +169,46 @@ const forgetPassword = async (req, res, next) => {
   }
 };
 
+// user profile 
+  const viewprofilebyID = async(req,res,next)=>{
+    try {
+      const user_id = req.params.id
+      const viewid =await userService.profileID(user_id)
+      if(!viewid){
+        res.status(404).json({message:"Not found user"})
+      }
+     res.status(200).json(viewid)
+    } catch (error) {
+      res.status(400).json({message:"ดูดีๆ"})
+    }
+  };
+
+  const viewprofile = async(req,res,next)=>{
+    try {
+      const viewall = await userService.profile()
+      res.status(201).json(viewall)
+    } catch (error) {
+      res.status(400).json({message:"error viewprofile"})
+    }
+  };
+
+  // delete fav
+  const deleteFav = async(req,res,next)=>{
+    try {
+      const user_id = req.params.id
+      const delectpinnedArray = req.params.pinnedID  
+      const pinnedID = req.params.pinnedID
+      const delect = await userService.delectcarlist(user_id,delectpinnedArray)
+      res.status(400).json({message:"delect success",pinnedID,delect})
+    } catch (error) {
+      next(error)
+    }
+  }
+  
+
 
 const deleteUserEmail = async (req, res, next) => {
   res.send('DELETE /api/users/:email');
 };
 
-export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword };
+export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav };

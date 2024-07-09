@@ -18,5 +18,14 @@ const deleteCarById = async (idObject) => {
   return result;
 };
 
+const getAllCars = async () => {
+  try {
+    const cars = await TemporaryCar.find(); // ใช้ find() เพื่อค้นหารถทั้งหมด
+    console.log("ServiceCars", cars);
+    return cars;
+  } catch (error) {
+    throw new Error("Error fetching cars");
+  }
+};
 
-export default { getCarById, deleteCarById };
+export default { getCarById, deleteCarById, getAllCars };

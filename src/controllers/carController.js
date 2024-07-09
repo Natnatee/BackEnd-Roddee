@@ -125,7 +125,7 @@ const getCarById = async (req, res, next) => {
   try {
     const { id } = req.params; //ถ้าอยากเช็คให้
     const car = await carService.getCarById(id);
-    res.status(200).json({ message: car });
+    res.status(200).json({ car });
   } catch (error) {
     next(error);
   }
@@ -135,7 +135,7 @@ const carBrand = async (req, res, next) => {
   try {
     const { brand } = req.params; //ถ้าอยากเช็คให้
     const car = await carService.carBrand(brand);
-    res.status(200).json({ message: car });
+    res.status(200).json({ car });
   } catch (error) {
     next(error);
   }

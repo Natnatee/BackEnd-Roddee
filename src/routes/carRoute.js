@@ -18,4 +18,8 @@ router.post("/searchbar", carController.searchCar);
 // API - Get Car By ID
 router.get("/:id", carController.getCarById);
 
+// API - Get Car By Brand
+router.get('/brand/:brand', carController.carBrand); // สร้าง route เพื่อจัดการคำขอ GET ที่ path /brand/:brand และเรียกใช้ฟังก์ชัน carBrand จาก controller
+
+
 export default router;

@@ -1,5 +1,4 @@
-// carService.js
-import Car from "../models/Car.js";
+import Car from "../models/car.js";
 
 const createCar = async (data) => {
   const car = new Car(data);

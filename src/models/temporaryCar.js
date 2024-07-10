@@ -126,6 +126,22 @@ const temporaryCarSchema = new mongoose.Schema({
     },
   },
   createOn: { type: Date, default: new Date().getTime() },
+  latitude: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  longtitude: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  Seller_User: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    default: null,
+    ref: "User", // Assuming there is a User model
+  },
 });
 
 const TemporaryCar = mongoose.model(

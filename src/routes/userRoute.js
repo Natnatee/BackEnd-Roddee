@@ -33,4 +33,14 @@ router.delete("/delete/:id/:pinnedID",userController.deleteFav)
 // API - SoftDelete
 router.delete("/:email", userController.deleteUserEmail);
 
+//API - Add favourite car
+// router.post("/:id/:pinnedID",userController.deleteFav)
+
+// API - 8  Add movie to movie list
+// router.post('/:movieListId/movies/:movieId', movieListController.addMovieToMovieList);
+
+
+
+
+
 export default router;

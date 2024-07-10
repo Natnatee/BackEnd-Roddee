@@ -126,8 +126,34 @@ const carSchema = new mongoose.Schema({
     },
   },
   createOn: { type: Date, default: new Date().getTime() },
+  isSale: {
+    type: Boolean,
+    default: false,
+  },
+  latitude: {
+    type: String,
+    default: null,
+    required: false,
+  },
+  longtitude: {
+    type: String,
+    default: null,
+    required: false,
+  },
+  adminDescription: {
+    type: String,
+    default: null,
+    required: false,
+  },
+  Seller_User: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    default: null,
+    ref: "User", // Assuming there is a User model
+  },
+
 });
 
-const Car = mongoose.model("Car", carSchema, "Cars");
+const Car = mongoose.model("Car", carSchema);
 
 export default Car;

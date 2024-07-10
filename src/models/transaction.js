@@ -35,9 +35,13 @@ const transactionSchema = new mongoose.Schema({
   },
   Seller_User: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
+    required: false,
     ref: "User", // Assuming there is a User model
   },
+  isSuccess: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const Transaction = mongoose.model("Transaction", transactionSchema);

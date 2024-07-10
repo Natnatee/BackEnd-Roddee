@@ -1,5 +1,5 @@
 import User from "../models/user.js";
-import Car from "../models/Car.js";
+import Car from "../models/car.js";
 
 const getcar = async (id) => {
   const newId = id.id;

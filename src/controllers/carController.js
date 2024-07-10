@@ -1,5 +1,5 @@
 import carService from "../services/carService.js";
-
+import User from "../models/user.js";
 
 // API - Create Car
 const createCar = async (req, res, next) => {
@@ -31,6 +31,7 @@ const createCar = async (req, res, next) => {
       longtitude,
       isSell,
       adminDescription,
+      Seller_User,
       
     } = req.body;
     const data = {
@@ -60,6 +61,7 @@ const createCar = async (req, res, next) => {
       longtitude,
       isSell,
       adminDescription,
+      Seller_User,
       
     };
     const car = await carService.createCar(data);

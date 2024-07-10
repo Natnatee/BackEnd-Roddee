@@ -126,6 +126,16 @@ const temporaryCarSchema = new mongoose.Schema({
     },
   },
   createOn: { type: Date, default: new Date().getTime() },
+  latitude: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  longtitude: {
+    type: String,
+    required: false,
+    default: null,
+  },
 });
 
 const TemporaryCar = mongoose.model(

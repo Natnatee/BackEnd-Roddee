@@ -1,5 +1,5 @@
-import Car from "../models/Car.js";
 import carService from "../services/carService.js";
+
 
 // API - Create Car
 const createCar = async (req, res, next) => {
@@ -27,6 +27,11 @@ const createCar = async (req, res, next) => {
       file4,
       file5,
       file6,
+      latitude,
+      longtitude,
+      isSell,
+      adminDescription,
+      
     } = req.body;
     const data = {
       headline,
@@ -51,6 +56,11 @@ const createCar = async (req, res, next) => {
       file4,
       file5,
       file6,
+      latitude,
+      longtitude,
+      isSell,
+      adminDescription,
+      
     };
     const car = await carService.createCar(data);
 
@@ -59,7 +69,6 @@ const createCar = async (req, res, next) => {
     next(error);
   }
 };
-
 
 // API - RANDOM
 
@@ -131,6 +140,7 @@ const getCarById = async (req, res, next) => {
   }
 };
 
+//API - Car by Brand
 const carBrand = async (req, res, next) => {
   try {
     const { brand } = req.params; //ถ้าอยากเช็คให้
@@ -141,7 +151,6 @@ const carBrand = async (req, res, next) => {
   }
 };
 
-  
 export {
   createCar,
   getCarById,

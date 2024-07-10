@@ -126,6 +126,26 @@ const carSchema = new mongoose.Schema({
     },
   },
   createOn: { type: Date, default: new Date().getTime() },
+  isSale: {
+    type: Boolean,
+    default: false,
+  },
+  latitude: {
+    type: String,
+    default: null,
+    required: false,
+  },
+  longtitude: {
+    type: String,
+    default: null,
+    required: false,
+  },
+  adminDescription: {
+    type: String,
+    default: null,
+    required: false,
+  },
+
 });
 
 const Car = mongoose.model("Car", carSchema, "Cars");

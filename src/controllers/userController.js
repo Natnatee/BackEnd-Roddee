@@ -21,7 +21,7 @@ const createUser = async (req, res, next) => {
     if (!Email) throw new BadRequestError('Email is required');
     if (!Password) throw new BadRequestError('Password is required');
     if (!confirmPassword) throw new BadRequestError('Confirm password is required');
-    if (!Profile_Image) throw new BadRequestError('Profile image is required');
+    // if (!Profile_Image) throw new BadRequestError('Profile image is required');
     // Check if password and confirmPassword match
     if (Password !== confirmPassword) { throw new BadRequestError('Password does not match'); }
     // Check if email already exists
@@ -34,7 +34,7 @@ const createUser = async (req, res, next) => {
 
     // Send verification email using Mailgun
     const mailOptions = {
-      from: 'natnatee_mond@hotmail.com', // Replace with your email address
+      from: 'RODDEE@Secondhandcar', // Replace with your email address
       to: Email,
       subject: 'Email Verification',
       html: `<p>Please verify your email by clicking the link below:</p>
@@ -112,7 +112,7 @@ const createUserForAdmin = async (req, res, next) => {
     if (!Email) throw new BadRequestError('Email is required');
     if (!Password) throw new BadRequestError('Password is required');
     if (!confirmPassword) throw new BadRequestError('Confirm password is required');
-    if (!Profile_Image) throw new BadRequestError('Profile image is required');
+    // if (!Profile_Image) throw new BadRequestError('Profile image is required');
     // Check if password and confirmPassword match
     if (Password !== confirmPassword) {throw new BadRequestError('Password does not match');}
     // Check if email already exists

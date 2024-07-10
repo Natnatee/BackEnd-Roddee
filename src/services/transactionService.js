@@ -1,6 +1,6 @@
 import Transaction from "../models/transaction.js";
 import User from "../models/user.js";
-import Car from "../models/Car.js";
+import Car from "../models/car.js";
 
 const deleteTransaction = async (idObject) => {
   const id = idObject.id;
@@ -30,7 +30,7 @@ const createTransaction = async ({Product_Id, Purchase_User}) => {
       Purchase_Date: new Date(), 
       Promotion: false, // สมมติว่าไม่มีโปรโมชั่น
       Purchase_User,
-      // Seller_User: car.Seller_User,  // ยังไม่มี seller user ใน car schema
+      Seller_User: car.Seller_User,  // ยังไม่มี seller user ใน car schema
     });
   // await transaction.save();
   return transaction;

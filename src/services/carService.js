@@ -18,7 +18,7 @@ const getCarById = async (id) => {
 };
 
 const randomCars = async () => {
-  const randomCar = await Car.aggregate([{ $sample: { size: 6 } }]);
+  const randomCar = await Car.aggregate([{ $sample: { size: 9 } }]);
   return randomCar;
 };
 

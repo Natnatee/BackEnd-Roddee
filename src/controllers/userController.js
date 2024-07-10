@@ -1,20 +1,29 @@
 import userService from "../services/userService.js";
-import { hashPassword, comparePassword } from '../utils/hash.js';
-import { sign, verify } from '../utils/token.js';
-import BadRequestError from '../error/BadRequestError.js';
-import formData from 'form-data';
-import Mailgun from 'mailgun.js';
+import { hashPassword, comparePassword } from "../utils/hash.js";
+import { sign, verify } from "../utils/token.js";
+import BadRequestError from "../error/BadRequestError.js";
+import formData from "form-data";
+import Mailgun from "mailgun.js";
 
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({
-  username: 'api',
+  username: "api",
   key: process.env.MAILGUN_API_KEY,
 });
 
 // API - Create User
 const createUser = async (req, res, next) => {
   try {
-    const { FirstName, LastName, Email, Password, pnumber, Profile_Image, pinned, confirmPassword } = req.body;
+    const {
+      FirstName,
+      LastName,
+      Email,
+      Password,
+      pnumber,
+      Profile_Image,
+      pinned,
+      confirmPassword,
+    } = req.body;
     // Validate required fields
     if (!FirstName) throw new BadRequestError('First name is required');
     if (!LastName) throw new BadRequestError('Last name is required');
@@ -23,32 +32,44 @@ const createUser = async (req, res, next) => {
     if (!confirmPassword) throw new BadRequestError('Confirm password is required');
     // if (!Profile_Image) throw new BadRequestError('Profile image is required');
     // Check if password and confirmPassword match
-    if (Password !== confirmPassword) { throw new BadRequestError('Password does not match'); }
+    if (Password !== confirmPassword) {
+      throw new BadRequestError("Password does not match");
+    }
     // Check if email already exists
     const userCheckMail = await userService.getUserByEmail(Email);
-    if (userCheckMail) throw new BadRequestError('Email already exists');
+    if (userCheckMail) throw new BadRequestError("Email already exists");
     // Hash password
     const hashedPassword = await hashPassword(Password);
     // Generate token with user data
-    const token = sign({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin: false, pinned, pnumber });
+    const token = sign({
+      FirstName,
+      LastName,
+      Email,
+      Password: hashedPassword,
+      Profile_Image,
+      isAdmin: false,
+      pinned,
+      pnumber,
+    });
 
     // Send verification email using Mailgun
     const mailOptions = {
       from: 'RODDEE@Secondhandcar', // Replace with your email address
       to: Email,
-      subject: 'Email Verification',
+      subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
              <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
     };
 
-    mg.messages.create(process.env.MAILGUN_DOMAIN, mailOptions)
+    mg.messages
+      .create(process.env.MAILGUN_DOMAIN, mailOptions)
       .then((body) => {
-        console.log('Email sent:', body);
+        console.log("Email sent:", body);
         res.status(201).json({ message: "Verification email sent" });
       })
       .catch((error) => {
-        console.error('Error sending email:', error);
-        throw new Error('Failed to send verification email');
+        console.error("Error sending email:", error);
+        throw new Error("Failed to send verification email");
       });
   } catch (error) {
     next(error);
@@ -62,17 +83,35 @@ const verifyEmail = async (req, res, next) => {
     const decoded = verify(token);
 
     if (!decoded) {
-      throw new BadRequestError('Invalid token');
+      throw new BadRequestError("Invalid token");
     }
 
-    const { FirstName, LastName, Email, Password, Profile_Image, isAdmin, pinned, pnumber } = decoded;
+    const {
+      FirstName,
+      LastName,
+      Email,
+      Password,
+      Profile_Image,
+      isAdmin,
+      pinned,
+      pnumber,
+    } = decoded;
 
     // Check if email already exists
     const userCheckMail = await userService.getUserByEmail(Email);
-    if (userCheckMail) throw new BadRequestError('Email already exists');
+    if (userCheckMail) throw new BadRequestError("Email already exists");
 
     // Create user
-    const newUser = await userService.createUser({ FirstName, LastName, Email, Password, Profile_Image, isAdmin, pinned, pnumber });
+    const newUser = await userService.createUser({
+      FirstName,
+      LastName,
+      Email,
+      Password,
+      Profile_Image,
+      isAdmin,
+      pinned,
+      pnumber,
+    });
 
     // Generate a new token to be used for authentication
     const newToken = sign({ id: newUser.id });
@@ -88,15 +127,17 @@ const login = async (req, res, next) => {
     const { Email, Password } = req.body;
     // Find user by email
     const user = await userService.getUserByEmail(Email);
-    if (!user) throw new BadRequestError('Invalid Email');
+    if (!user) throw new BadRequestError("Invalid Email");
     // Compare password
     const isMatch = await comparePassword(Password, user.Password);
-    if (!isMatch) throw new BadRequestError('Invalid Password');
+    if (!isMatch) throw new BadRequestError("Invalid Password");
     // Generate token
     const token = sign({ id: user.id });
     delete user.Password;
 
-    res.status(200).json({ message: 'Login success', data: user, access_token: token });
+    res
+      .status(200)
+      .json({ message: "Login success", data: user, access_token: token });
   } catch (error) {
     next(error);
   }
@@ -135,12 +176,12 @@ const createUserForAdmin = async (req, res, next) => {
 const orderPinned = async (req, res, next) => {
   try {
     const Order = await userService.topPinned();
-    const newOrder = Order.map(order => order._id);
+    const newOrder = Order.map((order) => order._id);
     res.status(200).json({ data: newOrder });
   } catch (error) {
     next(error);
   }
-}
+};
 
 const editUser = async (req, res, next) => {
   try {
@@ -165,34 +206,27 @@ const editUser = async (req, res, next) => {
     };
 
     const user = await userService.editUser(_id, data);
-
     res.status(201).json({ message: "Edit data", data: user });
   } catch (error) {
     next(error);
   }
 };
 
-// API - Forget Password
 const forgetPassword = async (req, res, next) => {
   try {
-    
-    const { Email } = req.body; 
-    
+    const { Email } = req.body;
+
     console.log("Email from request:", Email);
     const existUser = await userService.getRecoverByEmail(Email);
     if (!existUser) {
       return res.status(400).json({ message: "Email not found" });
     }
-   
+
     res.status(201).json({
       message: "Send User ID Success",
       data: Email,
-      userId: existUser._id 
+      userId: existUser._id,
     });
-
-    // const newPassword = await userService.forgetUser(id);
-    // res.status(201).json({ message: "Password send to email" });
-    // res.status(201).json({ message: "Password send to email", data: user });
   } catch (error) {
     next(error);
   }
@@ -237,7 +271,7 @@ const forgetPassword = async (req, res, next) => {
 
 
 const deleteUserEmail = async (req, res, next) => {
-  res.send('DELETE /api/users/:email');
+  res.send("DELETE /api/users/:email");
 };
 
 export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav, createUserForAdmin};

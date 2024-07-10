@@ -8,6 +8,7 @@ router.delete("/:id", transactionControl.deleteTransaction);
 // buy
 router.post("/", transactionControl.createTransaction);
 
-router.get('/user/:Id', transactionControl.getTransactionsByUser); // Id matches the controller
+// patch update 
+router.patch("/date/:id",transactionControl.patchUpdate)
 
 export default router;

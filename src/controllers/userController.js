@@ -25,13 +25,12 @@ const createUser = async (req, res, next) => {
       confirmPassword,
     } = req.body;
     // Validate required fields
-    if (!FirstName) throw new BadRequestError("First name is required");
-    if (!LastName) throw new BadRequestError("Last name is required");
-    if (!Email) throw new BadRequestError("Email is required");
-    if (!Password) throw new BadRequestError("Password is required");
-    if (!confirmPassword)
-      throw new BadRequestError("Confirm password is required");
-    if (!Profile_Image) throw new BadRequestError("Profile image is required");
+    if (!FirstName) throw new BadRequestError('First name is required');
+    if (!LastName) throw new BadRequestError('Last name is required');
+    if (!Email) throw new BadRequestError('Email is required');
+    if (!Password) throw new BadRequestError('Password is required');
+    if (!confirmPassword) throw new BadRequestError('Confirm password is required');
+    // if (!Profile_Image) throw new BadRequestError('Profile image is required');
     // Check if password and confirmPassword match
     if (Password !== confirmPassword) {
       throw new BadRequestError("Password does not match");
@@ -55,7 +54,7 @@ const createUser = async (req, res, next) => {
 
     // Send verification email using Mailgun
     const mailOptions = {
-      from: "natnatee_mond@hotmail.com", // Replace with your email address
+      from: 'RODDEE@Secondhandcar', // Replace with your email address
       to: Email,
       subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
@@ -144,6 +143,35 @@ const login = async (req, res, next) => {
   }
 };
 
+// API - Create User
+const createUserForAdmin = async (req, res, next) => {
+  try {
+    const { FirstName, LastName, Email, Password, pnumber, Profile_Image, pinned, confirmPassword } = req.body;
+    // Validate required fields
+    if (!FirstName) throw new BadRequestError('First name is required');
+    if (!LastName) throw new BadRequestError('Last name is required');
+    if (!Email) throw new BadRequestError('Email is required');
+    if (!Password) throw new BadRequestError('Password is required');
+    if (!confirmPassword) throw new BadRequestError('Confirm password is required');
+    // if (!Profile_Image) throw new BadRequestError('Profile image is required');
+    // Check if password and confirmPassword match
+    if (Password !== confirmPassword) {throw new BadRequestError('Password does not match');}
+    // Check if email already exists
+    const userCheckMail = await userService.getUserByEmail(Email);
+    if (userCheckMail) throw new BadRequestError('Email already exists');
+    // Hash password
+    const hashedPassword = await hashPassword(Password);
+    // Create user
+    const newUser = await userService.createUser({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin:false, pinned, pnumber });
+    // Generate token
+    const token = sign({ id: newUser.id });
+
+    res.status(201).json({ message: "Create User", data: newUser, access_token: token });
+  } catch (error) {
+    next(error);
+  }
+};
+
 //API : orderPinned
 const orderPinned = async (req, res, next) => {
   try {
@@ -204,16 +232,46 @@ const forgetPassword = async (req, res, next) => {
   }
 };
 
+// user profile 
+  const viewprofilebyID = async(req,res,next)=>{
+    try {
+      const user_id = req.params.id
+      const viewid =await userService.profileID(user_id)
+      if(!viewid){
+        res.status(404).json({message:"Not found user"})
+      }
+     res.status(200).json(viewid)
+    } catch (error) {
+      res.status(400).json({message:"ดูดีๆ"})
+    }
+  };
+
+  const viewprofile = async(req,res,next)=>{
+    try {
+      const viewall = await userService.profile()
+      res.status(201).json(viewall)
+    } catch (error) {
+      res.status(400).json({message:"error viewprofile"})
+    }
+  };
+
+  // delete fav
+  const deleteFav = async(req,res,next)=>{
+    try {
+      const user_id = req.params.id
+      const delectpinnedArray = req.params.pinnedID  
+      const pinnedID = req.params.pinnedID
+      const delect = await userService.delectcarlist(user_id,delectpinnedArray)
+      res.status(400).json({message:"delect success",pinnedID,delect})
+    } catch (error) {
+      next(error)
+    }
+  }
+  
+
+
 const deleteUserEmail = async (req, res, next) => {
   res.send("DELETE /api/users/:email");
 };
 
-export {
-  createUser,
-  verifyEmail,
-  editUser,
-  deleteUserEmail,
-  login,
-  orderPinned,
-  forgetPassword,
-};
+export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav, createUserForAdmin};

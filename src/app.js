@@ -5,13 +5,14 @@ import connectDB from "./config/database.js";
 import morgan from "morgan";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
-import notfoundMiddleware from './middleware/notfoundMiddleware.js';
-import errorHandlerMiddleware from './middleware/errorMiddleware.js';
-
+import notfoundMiddleware from "./middleware/notfoundMiddleware.js";
+import errorHandlerMiddleware from "./middleware/errorMiddleware.js";
 import userRoutes from "./routes/userRoute.js";
 import carRoutes from "./routes/carRoute.js";
 import temporaryCarRoute from "./routes/temporaryCarRoute.js";
 import transactionRoute from "./routes/transactionRoute.js";
+import carlistRoute from "./routes/carlistRoute.js";
+
 //Facilitate
 dotenv.config();
 const app = express();
@@ -36,9 +37,11 @@ app.use("/api/users", userRoutes);
 app.use("/api/cars", carRoutes);
 app.use("/api/temporarycars", temporaryCarRoute);
 app.use("/api/transaction", transactionRoute);
+app.use("/api/car-list", carlistRoute);
+
 
 //Handle404
-app.use(notfoundMiddleware)
+app.use(notfoundMiddleware);
 //Handle Error
 app.use(errorHandlerMiddleware);
 // Connect to database

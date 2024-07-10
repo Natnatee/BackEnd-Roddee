@@ -17,8 +17,8 @@ const userSchema = new mongoose.Schema({
       validator: function (v) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
       },
-      message: props => `${props.value} is not a valid email!`
-    }
+      message: (props) => `${props.value} is not a valid email!`,
+    },
   },
   Password: {
     type: String,
@@ -30,14 +30,14 @@ const userSchema = new mongoose.Schema({
   },
   Profile_Image: {
     type: String,
-    default: "False",
-    validate: {
-      validator: function (v) {
-        return v === "False" || /^(ftp|http|https):\/\/[^ "]+$/.test(v);
-      },
-      message: props => `${props.value} is not a valid URL!`
-    }
+    default: null,
+    // validate: {
+    //   validator: function (v) {
+    //     return v === "False" || /^(ftp|http|https):\/\/[^ "]+$/.test(v);
+    //   },
+    // message: props => `${props.value} is not a valid URL!`
   },
+  // },
   isAdmin: {
     type: Boolean,
     required: true,
@@ -46,7 +46,11 @@ const userSchema = new mongoose.Schema({
   pinned: {
     type: [String],
     default: [],
-  }
+  },
+  isDelete: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const User = mongoose.model("User", userSchema, "Users");

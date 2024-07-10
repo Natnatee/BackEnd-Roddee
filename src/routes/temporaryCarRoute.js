@@ -8,6 +8,6 @@ router.get("/:id", temporaryCarController.getCarById);
 // delete temp
 router.delete("/:id", temporaryCarController.deleteCarById);
 
-router.get("/", temporaryCarController.getAllCars);
+router.post("/",temporaryCarController.postCar)
 
 export default router;

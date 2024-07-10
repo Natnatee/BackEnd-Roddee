@@ -18,6 +18,12 @@ const deleteCarById = async (idObject) => {
   return result;
 };
 
+const createCartem = async(data)=>{
+  const carTem = new TemporaryCar(data)
+  await  carTem.save()
+  return carTem
+}
+
 const getAllCars = async () => {
   try {
     const cars = await TemporaryCar.find(); // ใช้ find() เพื่อค้นหารถทั้งหมด
@@ -28,4 +34,4 @@ const getAllCars = async () => {
   }
 };
 
-export default { getCarById, deleteCarById, getAllCars };
+export default { getCarById, deleteCarById,createCartem, getAllCars };

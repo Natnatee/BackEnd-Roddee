@@ -44,11 +44,22 @@ const createTransaction = async (data) => {
 //   return transaction;
 // };
 
-
-
+const getTransactionsByUser = async (id) => {
+  try {
+    console.log(id);
+    const transactions = await Transaction.find({
+      Purchase_User: `${id}`,
+    }).exec();
+    console.log(transactions);
+    return transactions;
+  } catch (error) {
+    console.error("Error fetching transactions by user:", error);
+    throw error; // Re-throw the error to be handled by the calling function
+  }
+};
 
 const updateTransaction = async(id,updateData)=>{
   const result = await Transaction.findByIdAndUpdate(id,updateData,{ new: true })
   return result
 }
-export default { deleteTransaction,updateTransaction, createTransaction };
+export default { deleteTransaction,updateTransaction, createTransaction, getTransactionsByUser };

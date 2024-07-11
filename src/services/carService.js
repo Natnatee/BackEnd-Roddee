@@ -17,7 +17,7 @@ const getCarById = async (id) => {
 };
 
 const randomCars = async () => {
-  const randomCar = await Car.aggregate([{ $sample: { size: 6 } }]);
+  const randomCar = await Car.aggregate([{ $sample: { size: 9 } }]);
   return randomCar;
 };
 
@@ -36,7 +36,7 @@ const carLast = async () => {
 const carBrand = async (brand) => {
   // ฟังก์ชัน asynchronous เพื่อค้นหา car ตาม brand
   return await Car.find({ brand }); // ค้นหา car ที่มี brand ตรงกับค่าที่ส่งเข้ามา
-};
+}
 
 const carAll = async()=>{
   try {

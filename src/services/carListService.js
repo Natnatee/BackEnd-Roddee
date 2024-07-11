@@ -10,4 +10,17 @@ const getcar = async (id) => {
   return cars;
 };
 
-export default { getcar };
+const togglePin = async (userId, carId, action) => {
+  const user = await User.findById(userId);
+
+  if (action === 'add' && !user.pinned.includes(carId)) {
+    user.pinned.push(carId);
+  } else if (action === 'remove' && user.pinned.includes(carId)) {
+    user.pinned = user.pinned.filter(id => id !== carId);
+  }
+
+  await user.save();
+  return user;
+};
+
+export default { getcar, togglePin };

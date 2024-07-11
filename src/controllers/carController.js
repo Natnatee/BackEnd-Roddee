@@ -1,5 +1,5 @@
 import carService from "../services/carService.js";
-import User from "../models/user.js";
+import NotFoundError from "../error/NotFoundError.js"
 
 // API - Create Car
 const createCar = async (req, res, next) => {
@@ -153,6 +153,18 @@ const carBrand = async (req, res, next) => {
   }
 };
 
+const getAll = async(req,res,next)=>{
+  try {
+    const All = await carService.carAll()
+    res.status(200).json(All)
+    if(!All){
+      throw new NotFoundError("ไม่พบสิ่งที่คุณต้องการ")
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+  
 export {
   createCar,
   getCarById,
@@ -160,4 +172,5 @@ export {
   carLastest,
   randomAllCars,
   carBrand,
+  getAll,
 };

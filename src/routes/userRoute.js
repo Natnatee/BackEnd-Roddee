@@ -28,7 +28,8 @@ router.get("/profile",userController.viewprofile)
 // api delect cat fav 
 router.delete("/delete/:id/:pinnedID",userController.deleteFav)
 
-
+//Api for send profile picture url to db
+router.patch('/uploadprofilepicture', userController.uploadProfile);
 
 // API - SoftDelete
 router.delete("/:email", userController.deleteUserEmail);

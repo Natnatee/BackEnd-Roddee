@@ -70,8 +70,6 @@ const delectcarlist = async(id,pinnedArray)=>{
   } catch (error) {
     throw new NotFoundError("Fail delect")
   }
-   
-
-} 
+};
 
 export default { createUser,profileID,profile,getUserByEmail, topPinned, editUser, getRecoverByEmail, deleteUserEmail,delectcarlist };

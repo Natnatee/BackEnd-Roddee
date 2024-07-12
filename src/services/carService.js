@@ -38,6 +38,14 @@ const carBrand = async (brand) => {
   return await Car.find({ brand }); // ค้นหา car ที่มี brand ตรงกับค่าที่ส่งเข้ามา
 }
 
+const carAll = async()=>{
+  try {
+    const All = await Car.find()
+    return All
+  } catch (error) {
+    next(error)
+  }
+}
 export default {
   createCar,
   carLast,
@@ -45,4 +53,5 @@ export default {
   randomCars,
   getCarById,
   carBrand,
+  carAll,
 };

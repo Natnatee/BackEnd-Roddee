@@ -7,4 +7,16 @@ const getcar = async (req, res, next) => {
   res.status(200).json({ message: result });
 };
 
-export default { getcar };
+const togglePin = async (req, res, next) => {
+  const { userId, carId, action } = req.body;
+
+  try {
+    const user = await carListService.togglePin(userId, carId, action);
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error toggling pin:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export default { getcar, togglePin };

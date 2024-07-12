@@ -134,7 +134,7 @@ const carLastest = async (req, res, next) => {
 // API - Get Car By ID
 const getCarById = async (req, res, next) => {
   try {
-    const { id } = req.params; //ถ้าอยากเช็คให้
+    const { id } = req.params; 
     const car = await carService.getCarById(id);
     res.status(200).json(car);
   } catch (error) {
@@ -145,7 +145,7 @@ const getCarById = async (req, res, next) => {
 //API - Car by Brand
 const carBrand = async (req, res, next) => {
   try {
-    const { brand } = req.params; //ถ้าอยากเช็คให้
+    const { brand } = req.params; 
     const car = await carService.carBrand(brand);
     res.status(200).json(car);
   } catch (error) {

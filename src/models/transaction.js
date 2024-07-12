@@ -41,7 +41,14 @@ const transactionSchema = new mongoose.Schema({
   isSuccess: {
     type: Boolean,
     default: false,
-  }
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  etc: {
+    type: String,
+  },
 });
 
 const Transaction = mongoose.model("Transaction", transactionSchema);

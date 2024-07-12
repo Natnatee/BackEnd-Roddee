@@ -131,7 +131,7 @@ const temporaryCarSchema = new mongoose.Schema({
     required: false,
     default: null,
   },
-  longtitude: {
+  longitude: {
     type: String,
     required: false,
     default: null,

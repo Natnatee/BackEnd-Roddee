@@ -29,7 +29,7 @@ const searchCar = async (searchQuery) => {
 
 // lastest car
 const carLast = async () => {
-  const lastest = await Car.find().sort({ year: -1 });
+  const lastest = await Car.find().sort({ year: -1 }).limit(9);
   return lastest;
 };
 

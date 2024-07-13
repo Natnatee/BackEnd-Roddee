@@ -55,11 +55,11 @@ const createUser = async (req, res, next) => {
 
     // Send verification email using Mailgun
     const mailOptions = {
-      from: 'RODDEE@Secondhandcar', // Replace with your email address
+      from: 'RoddeeJSD7@outlook.com', // Replace with your email address
       to: Email,
       subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
-             <a href="http://localhost:5174/dashboard?token=${token}">Verify Email</a>`,
+             <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
     };
 
     mg.messages

@@ -59,7 +59,7 @@ const createUser = async (req, res, next) => {
       to: Email,
       subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
-             <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
+             <a href="https://front-end-car-ecommerce.vercel.app/dashboard?token=${token}">Verify Email</a>`,
     };
 
     mg.messages

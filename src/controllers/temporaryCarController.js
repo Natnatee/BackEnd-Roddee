@@ -1,5 +1,6 @@
 import temporaryCarService from "../services/temporaryCarService.js";
 import NotFoundError from "../error/NotFoundError.js";
+import TemporaryCar from "../models/temporaryCar.js";
 
 const getCarById = async (req, res, next) => {
   try {
@@ -19,7 +20,7 @@ const deleteCarById = async (req, res, next) => {
   const result = await temporaryCarService.deleteCarById(id);
   res.status(200).json({ message: "delete car complete", data: result });
 };
-
+// get all
 const getAllCars = async (req, res, next) => {
   try {
     const cars = await temporaryCarService.getAllCars();
@@ -116,6 +117,8 @@ const postCar = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+
+
 };
 
-export default { getCarById, deleteCarById, getAllCars, postCar };
+export default { getCarById, deleteCarById, getAllCars, postCar,getTemcarall};

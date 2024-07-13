@@ -10,4 +10,5 @@ router.delete("/:id", temporaryCarController.deleteCarById);
 
 router.post("/",temporaryCarController.postCar)
 
+router.get("/",temporaryCarController.getAllCars)
 export default router;

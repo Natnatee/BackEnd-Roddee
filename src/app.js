@@ -12,6 +12,7 @@ import carRoutes from "./routes/carRoute.js";
 import temporaryCarRoute from "./routes/temporaryCarRoute.js";
 import transactionRoute from "./routes/transactionRoute.js";
 import carlistRoute from "./routes/carlistRoute.js";
+import bodyParser from 'body-parser';
 
 //Facilitate
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+app.use(bodyParser.json());
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs

@@ -4,6 +4,7 @@ import { sign, verify } from "../utils/token.js";
 import BadRequestError from "../error/BadRequestError.js";
 import formData from "form-data";
 import Mailgun from "mailgun.js";
+import User from "../models/user.js";
 
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({
@@ -54,11 +55,11 @@ const createUser = async (req, res, next) => {
 
     // Send verification email using Mailgun
     const mailOptions = {
-      from: 'RODDEE@Secondhandcar', // Replace with your email address
+      from: 'RoddeeJSD7@outlook.com', // Replace with your email address
       to: Email,
       subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
-             <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
+             <a href="https://front-end-car-ecommerce.vercel.app/dashboard?token=${token}">Verify Email</a>`,
     };
 
     mg.messages
@@ -274,4 +275,30 @@ const deleteUserEmail = async (req, res, next) => {
   res.send("DELETE /api/users/:email");
 };
 
-export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav, createUserForAdmin};
+
+
+// profile pic api
+const uploadProfile = async (req, res, next) => {
+  try {
+    const { userId, Profile_Image } = req.body;
+    if (!Profile_Image) {
+      return res.status(400).json({ error: 'Profile image is required' });
+    }
+    const user = await User.findByIdAndUpdate(userId, { Profile_Image }, { new: true });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error updating profile image:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+    
+   
+
+
+
+
+
+export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav, createUserForAdmin, uploadProfile};

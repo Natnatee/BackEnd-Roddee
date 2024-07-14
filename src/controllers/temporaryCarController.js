@@ -24,7 +24,7 @@ const deleteCarById = async (req, res, next) => {
 const getAllCars = async (req, res, next) => {
   try {
     const cars = await temporaryCarService.getAllCars();
-    res.status(200).json({ cars });
+    res.status(200).json(cars);
   } catch (error) {
     next(error);
   }
@@ -121,4 +121,4 @@ const postCar = async (req, res, next) => {
 
 };
 
-export default { getCarById, deleteCarById, getAllCars, postCar,getTemcarall};
+export default { getCarById, deleteCarById, getAllCars, postCar,};

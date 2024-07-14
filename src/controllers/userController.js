@@ -5,6 +5,7 @@ import BadRequestError from "../error/BadRequestError.js";
 import formData from "form-data";
 import Mailgun from "mailgun.js";
 import User from "../models/user.js";
+import carService from "../services/carService.js";
 
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({
@@ -59,7 +60,7 @@ const createUser = async (req, res, next) => {
       to: Email,
       subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
-             <a href="https://front-end-car-ecommerce.vercel.app/dashboard?token=${token}">Verify Email</a>`,
+             <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
     };
 
     mg.messages
@@ -174,15 +175,20 @@ const createUserForAdmin = async (req, res, next) => {
 };
 
 //API : orderPinned
+// API: orderPinned
 const orderPinned = async (req, res, next) => {
   try {
-    const Order = await userService.topPinned();
-    const newOrder = Order.map((order) => order._id);
-    res.status(200).json({ data: newOrder });
+    const Order = await userService.topPinned(); // Get the top pinned items
+    const newOrder = await Promise.all(Order.map(async (order) => {
+      const car = await carService.getCarById(order._id); // Fetch car details
+      return car;
+    }));
+    res.status(200).json(newOrder);
   } catch (error) {
     next(error);
   }
 };
+
 
 const editUser = async (req, res, next) => {
   try {
@@ -294,8 +300,8 @@ const uploadProfile = async (req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-    
-   
+
+
 
 
 

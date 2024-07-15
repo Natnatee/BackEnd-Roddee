@@ -1,9 +1,24 @@
 import Car from "../models/car.js";
+import TemporaryCar from "../models/temporaryCar.js";
 
-const createCar = async (data) => {
-  const car = new Car(data);
-  await car.save();
-  return car;
+const createCar = async (_id, data) => {
+  try {
+    const car = new Car(data);
+    const createResult = await car.save();
+    let deleteTempcar = null;
+
+    if (createResult) {
+      deleteTempcar = await TemporaryCar.findByIdAndDelete(_id);
+    }
+
+    return {
+      createResult,
+      deleteTempcar,
+    };
+  } catch (error) {
+    console.error("Error creating car and deleting temporary car:", error);
+    throw new Error("Error creating car and deleting temporary car:", error);
+  }
 };
 
 const getCarById = async (id) => {
@@ -36,16 +51,16 @@ const carLast = async () => {
 const carBrand = async (brand) => {
   // ฟังก์ชัน asynchronous เพื่อค้นหา car ตาม brand
   return await Car.find({ brand }); // ค้นหา car ที่มี brand ตรงกับค่าที่ส่งเข้ามา
-}
+};
 
-const carAll = async()=>{
+const carAll = async () => {
   try {
-    const All = await Car.find()
-    return All
+    const All = await Car.find();
+    return All;
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 export default {
   createCar,
   carLast,

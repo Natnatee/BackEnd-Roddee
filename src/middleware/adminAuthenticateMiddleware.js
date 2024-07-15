@@ -8,9 +8,9 @@ const adminAuthenticateMiddleware = async (req, res, next) => {
     if (!token) throw new UnAuthorizeError("Unauthenticated");
     const decoded = verify(token);
     const user = await userService.profileID(decoded.id);
-    console.log("Admin : ", user.isAdmin);
-    if (!user) throw new UnAuthorizeError("Unauthenticated");
-    if (!user.isAdmin) throw new UnAuthorizeError("Unauthenticated");
+    console.log('Admin : ', user.isAdmin);
+    if (!user) throw new UnAuthorizeError('Unauthenticated');
+    if (!user.isAdmin) throw new UnAuthorizeError('Unauthenticated');
 
     req.user = user;
     next();

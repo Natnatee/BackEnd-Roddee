@@ -16,7 +16,7 @@ router.post("/registerForAdmin", userController.createUserForAdmin);
 // API OrderPinned
 router.get("/Top-Car", userController.orderPinned);
 // API - Edit
-router.put("/profile/:id", userController.editUser);
+router.put("/profile/:id",authenticateMiddleware, userController.editUser);
 
 //API - Forget Password
 router.post("/password",authenticateMiddleware, userController.forgetPassword);

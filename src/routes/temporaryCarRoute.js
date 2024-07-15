@@ -12,4 +12,5 @@ router.delete("/:id", temporaryCarController.deleteCarById);
 
 router.post("/",authenticateMiddleware, temporaryCarController.postCar)
 
+router.get("/",temporaryCarController.getAllCars)
 export default router;

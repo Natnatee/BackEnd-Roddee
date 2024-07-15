@@ -16,7 +16,6 @@ const createCar = async (_id, data) => {
       deleteTempcar,
     };
   } catch (error) {
-    console.error("Error creating car and deleting temporary car:", error);
     throw new Error("Error creating car and deleting temporary car:", error);
   }
 };
@@ -61,6 +60,16 @@ const carAll = async () => {
     next(error);
   }
 };
+
+const deleteCar = async (id) => {
+  try {
+    const result = Car.findById(id);
+    return result;
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   createCar,
   carLast,

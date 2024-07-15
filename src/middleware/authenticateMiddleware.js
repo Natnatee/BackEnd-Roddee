@@ -1,6 +1,6 @@
-import { verify } from '../utils/token.js';
-import userService from '../services/userService.js';
-import UnAuthorizeError from '../error/UnAuthorizeError.js';
+import { verify } from "../utils/token.js";
+import userService from "../services/userService.js";
+import UnAuthorizeError from "../error/UnAuthorizeError.js";
 
 const authenticateMiddleware = async (req, res, next) => {
   try {

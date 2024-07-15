@@ -14,13 +14,17 @@ router.post("/registerForAdmin", userController.createUserForAdmin);
 // API OrderPinned
 router.get("/Top-Car", userController.orderPinned);
 // API - Edit
-router.put("/", userController.editUser);
+router.put("/profile/:id", userController.editUser);
 
 //API - Forget Password
 router.post("/password", userController.forgetPassword);
 
 // Api -get profile by id 
 router.get("/profile/:id",userController.viewprofilebyID)
+
+
+// Api get user id for edit page only
+router.get("/edit/:id",userController.getProfileInfo)
 
 // api get profile all 
 router.get("/profile",userController.viewprofile)
@@ -37,8 +41,7 @@ router.delete("/:email", userController.deleteUserEmail);
 //API - Add favourite car
 // router.post("/:id/:pinnedID",userController.deleteFav)
 
-// API - 8  Add movie to movie list
-// router.post('/:movieListId/movies/:movieId', movieListController.addMovieToMovieList);
+
 
 
 

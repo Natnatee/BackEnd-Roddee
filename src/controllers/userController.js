@@ -59,7 +59,7 @@ const createUser = async (req, res, next) => {
       to: Email,
       subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
-             <a href="http://localhost:5174/dashboard?token=${token}">Verify Email</a>`,
+             <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
     };
 
     mg.messages
@@ -184,32 +184,47 @@ const orderPinned = async (req, res, next) => {
   }
 };
 
-const editUser = async (req, res, next) => {
-  try {
-    const {
-      _id,
-      FirstName,
-      LastName,
-      Email,
-      Password,
-      Profile_Image,
-      isAdmin,
-      pinned,
-    } = req.body;
-    const data = {
-      FirstName,
-      LastName,
-      Email,
-      Password,
-      Profile_Image,
-      isAdmin,
-      pinned,
-    };
+// edit user
+// const editUser = async (req, res, next) => {
+//   try {
+//     const {
+//       _id,
+//       FirstName,
+//       LastName,
+//       Email,
+//       Password,
+//       Profile_Image,
+//       isAdmin,
+//       pinned,
+//       pnumber,
+//     } = req.body;
+//     const data = {
+//       FirstName,
+//       LastName,
+//       Email,
+//       Password,
+//       Profile_Image,
+//       isAdmin,
+//       pinned,
+//       pnumber,
+//     };
 
-    const user = await userService.editUser(_id, data);
-    res.status(201).json({ message: "Edit data", data: user });
+//     const user = await userService.editUser(_id, data);
+//     res.status(201).json({ message: "Edit data", data: user });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+//edit v2
+const editUser = async (req, res) => {
+  try {
+    const user = await userService.editUser(req.params.id, req.body);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json(user);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -247,6 +262,8 @@ const forgetPassword = async (req, res, next) => {
     }
   };
 
+
+  //view all
   const viewprofile = async(req,res,next)=>{
     try {
       const viewall = await userService.profile()
@@ -294,6 +311,18 @@ const uploadProfile = async (req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+//get by id for edit user page only
+const getProfileInfo = async (req, res, next) => {
+try {
+  const user = await User.findById(req.params.id);
+  if (!user) return res.status(404).json({ message: 'User not found' });
+
+  res.json(user);
+} catch (error) {
+  res.status(500).json({ message: error.message });
+}
+};
     
    
 
@@ -301,4 +330,4 @@ const uploadProfile = async (req, res, next) => {
 
 
 
-export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav, createUserForAdmin, uploadProfile};
+export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav, createUserForAdmin, uploadProfile,  getProfileInfo};

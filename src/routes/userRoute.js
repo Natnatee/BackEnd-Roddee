@@ -26,12 +26,12 @@ router.get("/profile/:id",userController.viewprofilebyID)
 
 
 // Api get user id for edit page only
-router.get("/edit/:id",userController.getProfileInfo)
+// router.get("/edit/:id",userController.getProfileInfo)
 
 // api get profile all 
 router.get("/profile",authenticateMiddleware,userController.viewprofile)
 
-// api delect cat fav 
+// api delect car fav 
 router.delete("/delete/:id/:pinnedID",userController.deleteFav)
 
 //Api for send profile picture url to db

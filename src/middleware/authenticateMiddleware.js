@@ -8,7 +8,7 @@ const authenticateMiddleware = async (req, res, next) => {
     if (!token) throw new UnAuthorizeError('Unauthenticated');
     
     const decoded = verify(token);
-    const user = await userService.getUserById(decoded.id);
+    const user = await userService.profileID(decoded.id);
 
     if (!user) throw new UnAuthorizeError('Unauthenticated');
 

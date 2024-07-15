@@ -16,25 +16,25 @@ router.post("/registerForAdmin", userController.createUserForAdmin);
 // API OrderPinned
 router.get("/Top-Car", userController.orderPinned);
 // API - Edit
-router.put("/", userController.editUser);
+router.put("/",authenticateMiddleware, userController.editUser);
 
 //API - Forget Password
-router.post("/password", userController.forgetPassword);
+router.post("/password",authenticateMiddleware, userController.forgetPassword);
 
 // Api -get profile by id 
 router.get("/profile/:id",userController.viewprofilebyID)
 
 // api get profile all 
-router.get("/profile",userController.viewprofile)
+router.get("/profile",authenticateMiddleware,userController.viewprofile)
 
 // api delect cat fav 
 router.delete("/delete/:id/:pinnedID",userController.deleteFav)
 
 //Api for send profile picture url to db
-router.patch('/uploadprofilepicture', userController.uploadProfile);
+router.patch('/uploadprofilepicture',authenticateMiddleware, userController.uploadProfile);
 
 // API - SoftDelete
-router.delete("/:email", userController.deleteUserEmail);
+router.delete("/:email",authenticateMiddleware, userController.deleteUserEmail);
 
 //API - Add favourite car
 // router.post("/:id/:pinnedID",userController.deleteFav)

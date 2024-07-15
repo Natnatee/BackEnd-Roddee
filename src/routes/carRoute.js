@@ -6,7 +6,7 @@ import authenticateMiddleware from "../middleware/authenticateMiddleware.js"
 const router = express.Router();
 
 // API - 1 Post
-router.post("/", carController.createCar);
+router.post("/",adminAuthenticateMiddleware, carController.createCar);
 
 // API - RANDOM
 router.get("/car-random", carController.randomAllCars);

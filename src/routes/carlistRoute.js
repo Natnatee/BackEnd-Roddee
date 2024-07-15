@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.get("/:id", carlistController.getcar);
 
-router.post("/togglePin",authenticateMiddleware, carlistController.togglePin);
+router.post("/togglePin", carlistController.togglePin);
 
 export default router;

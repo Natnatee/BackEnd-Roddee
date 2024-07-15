@@ -18,19 +18,21 @@ const getRecoverByEmail = async (Email) => {
 const getUserByEmail = async (email) => {
   const user = await User.findOne({ Email: email });
   return user;
-}
+};
 
 const topPinned = async () => {
   const orderPinned = await User.aggregate([
-    { $unwind: "$pinned"},
-    { $group: {
-      _id : "$pinned",
-      count : { $sum:1}
-    }},
-    { $sort: { count: -1}}
-  ])
-  return orderPinned
-}
+    { $unwind: "$pinned" },
+    {
+      $group: {
+        _id: "$pinned",
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { count: -1 } },
+  ]);
+  return orderPinned;
+};
 
 // const editUser = async (_id, data) => {
 //   const user = await User.findOneAndUpdate({ _id }, data, { new: true });
@@ -47,37 +49,48 @@ const editUser = async (userId, updateData) => {
   return user;
 };
 
-const deleteUserEmail = async (email) => { // ฟังก์ชัน asynchronous เพื่อลบ user
+const deleteUserEmail = async (email) => {
+  // ฟังก์ชัน asynchronous เพื่อลบ user
   const user = await User.findOneAndDelete({ Email: email }); // ใช้ findOneAndDelete เพื่อลบ user ตาม Email
   return user; // ส่งคืน user ที่ลบ
 };
 
-
-const profileID = async(user_id)=>{
-  const viewid = await User.findOne({_id:user_id})
-  return viewid
+const profileID = async (user_id) => {
+  const viewid = await User.findOne({ _id: user_id });
+  return viewid;
 };
 
-const profile = async()=>{
-  const view = await User.find()
-  return view
+const profile = async () => {
+  const view = await User.find();
+  return view;
 };
 
-const delectcarlist = async(id,pinnedArray)=>{
+const delectcarlist = async (id, pinnedArray) => {
   try {
-    const user_id = await User.findById(id)
-    if(!user_id){
-      throw new NotFoundError("User Not found")
+    const user_id = await User.findById(id);
+    if (!user_id) {
+      throw new NotFoundError("User Not found");
     }
     console.log(pinnedArray);
     const index = user_id.pinned.indexOf(pinnedArray);
     console.log(index);
-    user_id.pinned.splice(index,1)
-    await user_id.save()
-    return user_id
+    user_id.pinned.splice(index, 1);
+    await user_id.save();
+    return user_id;
   } catch (error) {
-    throw new NotFoundError("Fail delect")
+    throw new NotFoundError("Fail delect");
   }
 };
 
-export default { createUser,profileID,profile,getUserByEmail, topPinned, editUser, getRecoverByEmail, deleteUserEmail,delectcarlist };
+export default {
+  createUser,
+  profileID,
+  profile,
+  getUserByEmail,
+  topPinned,
+  editUser,
+  getRecoverByEmail,
+  deleteUserEmail,
+  delectcarlist,
+  getUserById,
+};

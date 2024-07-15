@@ -252,18 +252,20 @@ const forgetPassword = async (req, res, next) => {
 };
 
 // user profile 
-  const viewprofilebyID = async(req,res,next)=>{
-    try {
-      const user_id = req.params.id
-      const viewid =await userService.profileID(user_id)
-      if(!viewid){
-        res.status(404).json({message:"Not found user"})
-      }
-     res.status(200).json(viewid)
-    } catch (error) {
-      res.status(400).json({message:"ดูดีๆ"})
+const viewprofilebyID = async (req, res, next) => {
+  try {
+    const user_id = req.params.id;
+    const viewid = await userService.profileID(user_id);
+
+    if (!viewid) {
+      return res.status(404).json({ message: "Not found user" });
     }
-  };
+
+    res.status(200).json(viewid);
+  } catch (error) {
+    res.status(400).json({ message: "ดูดีๆ" });
+  }
+};
 
 
   //view all

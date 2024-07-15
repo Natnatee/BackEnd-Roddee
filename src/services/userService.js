@@ -73,15 +73,6 @@ const delectcarlist = async (id, pinnedArray) => {
   }
 };
 
-const getUserById = async (id) => {
-  try {
-    const user = await User.findById(id);
-    return user;
-  } catch (error) {
-    throw new Error();
-  }
-};
-
 export default {
   createUser,
   profileID,

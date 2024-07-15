@@ -5,12 +5,12 @@ import authenticateMiddleware from "../middleware/authenticateMiddleware.js"
 
 const router = express.Router();
 
-router.get("/:id",authenticateMiddleware, temporaryCarController.getCarById);
+router.get("/:id", temporaryCarController.getCarById);
 
 // delete temp
 router.delete("/:id", temporaryCarController.deleteCarById);
 
-router.post("/",authenticateMiddleware, temporaryCarController.postCar)
+router.post("/", temporaryCarController.postCar)
 
 router.get("/",temporaryCarController.getAllCars)
 export default router;

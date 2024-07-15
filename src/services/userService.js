@@ -34,9 +34,18 @@ const topPinned = async () => {
   return orderPinned;
 };
 
-const editUser = async (_id, data) => {
-  const user = await User.findOneAndUpdate({ _id }, data, { new: true });
-  console.log(user);
+// const editUser = async (_id, data) => {
+//   const user = await User.findOneAndUpdate({ _id }, data, { new: true });
+//   console.log(user);
+//   return user;
+// };
+
+
+const editUser = async (userId, updateData) => {
+  const user = await User.findByIdAndUpdate(userId, updateData, {
+    new: true,
+    runValidators: true,
+  });
   return user;
 };
 
@@ -83,5 +92,4 @@ export default {
   getRecoverByEmail,
   deleteUserEmail,
   delectcarlist,
-  getUserById,
 };

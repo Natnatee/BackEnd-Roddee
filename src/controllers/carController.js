@@ -34,6 +34,34 @@ const createCar = async (req, res, next) => {
       Seller_User,
       _id,
     } = req.body;
+
+    if (
+      !headline ||
+      !brand ||
+      !model ||
+      !type ||
+      !year ||
+      !mileage ||
+      !color ||
+      !fuel ||
+      !enginecap ||
+      !cushion ||
+      !seat ||
+      !gear ||
+      !price ||
+      !pnumber ||
+      !address ||
+      !additionalInfo ||
+      !file1 ||
+      !file2 ||
+      !file3 ||
+      !file4 ||
+      !file5 ||
+      !file6
+    ) {
+      return res.status(400).json({ message: "Please fill all input" });
+    }
+    
     const data = {
       headline,
       brand,

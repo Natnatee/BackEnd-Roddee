@@ -83,5 +83,4 @@ export default {
   getRecoverByEmail,
   deleteUserEmail,
   delectcarlist,
-  getUserById,
 };

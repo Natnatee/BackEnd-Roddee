@@ -10,9 +10,13 @@ const deleteTransaction = async (idObject) => {
 };
 
 const createTransaction = async (data) => {
-  const orderID = new Transaction(data);
-  await orderID.save();
-  return orderID;
+  const transaction = new Transaction(data);
+  try {
+    await transaction.save();
+    return transaction;
+  } catch (error) {
+    throw new Error(`Error saving transaction: ${error.message}`);
+  }
 };
 
 //API - Create transaction

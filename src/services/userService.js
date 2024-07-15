@@ -29,7 +29,6 @@ const topPinned = async () => {
     }},
     { $sort: { count: -1}}
   ])
-  console.log(orderPinned);
   return orderPinned
 }
 

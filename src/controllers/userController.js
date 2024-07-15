@@ -5,6 +5,7 @@ import BadRequestError from "../error/BadRequestError.js";
 import formData from "form-data";
 import Mailgun from "mailgun.js";
 import User from "../models/user.js";
+import carService from "../services/carService.js";
 
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({
@@ -55,7 +56,7 @@ const createUser = async (req, res, next) => {
 
     // Send verification email using Mailgun
     const mailOptions = {
-      from: 'RODDEE@Secondhandcar', // Replace with your email address
+      from: 'RoddeeJSD7@outlook.com', // Replace with your email address
       to: Email,
       subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
@@ -174,17 +175,21 @@ const createUserForAdmin = async (req, res, next) => {
 };
 
 //API : orderPinned
+
 const orderPinned = async (req, res, next) => {
   try {
-    const Order = await userService.topPinned();
-    const newOrder = Order.map((order) => order._id);
-    res.status(200).json({ data: newOrder });
+    const Order = await userService.topPinned(); // Get the top pinned items
+    const newOrder = await Promise.all(Order.map(async (order) => {
+      const car = await carService.getCarById(order._id); // Fetch car details
+      return car;
+    }));
+    res.status(200).json(newOrder);
   } catch (error) {
     next(error);
   }
 };
 
-// edit user
+
 // const editUser = async (req, res, next) => {
 //   try {
 //     const {
@@ -196,7 +201,6 @@ const orderPinned = async (req, res, next) => {
 //       Profile_Image,
 //       isAdmin,
 //       pinned,
-//       pnumber,
 //     } = req.body;
 //     const data = {
 //       FirstName,
@@ -206,7 +210,6 @@ const orderPinned = async (req, res, next) => {
 //       Profile_Image,
 //       isAdmin,
 //       pinned,
-//       pnumber,
 //     };
 
 //     const user = await userService.editUser(_id, data);
@@ -330,4 +333,9 @@ try {
 
 
 
-export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav, createUserForAdmin, uploadProfile,  getProfileInfo};
+
+
+
+
+
+export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword, viewprofilebyID, viewprofile, deleteFav, createUserForAdmin, uploadProfile, getProfileInfo};

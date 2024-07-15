@@ -71,7 +71,7 @@ const getTransaction = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = await transactionService.getTransactionsByUser(id);
-    res.status(200).json({ message: "success", data: data });
+    res.status(200).json(data);
   } catch (error) {
     next(error);
   }

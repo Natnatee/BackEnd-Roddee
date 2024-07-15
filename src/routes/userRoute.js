@@ -16,7 +16,7 @@ router.post("/registerForAdmin", userController.createUserForAdmin);
 // API OrderPinned
 router.get("/Top-Car", userController.orderPinned);
 // API - Edit
-router.put("/",authenticateMiddleware, userController.editUser);
+router.put("/profile/:id",authenticateMiddleware, userController.editUser);
 
 //API - Forget Password
 router.post("/password",authenticateMiddleware, userController.forgetPassword);
@@ -24,10 +24,14 @@ router.post("/password",authenticateMiddleware, userController.forgetPassword);
 // Api -get profile by id 
 router.get("/profile/:id",userController.viewprofilebyID)
 
+
+// Api get user id for edit page only
+// router.get("/edit/:id",userController.getProfileInfo)
+
 // api get profile all 
 router.get("/profile",authenticateMiddleware,userController.viewprofile)
 
-// api delect cat fav 
+// api delect car fav 
 router.delete("/delete/:id/:pinnedID",userController.deleteFav)
 
 //Api for send profile picture url to db
@@ -39,8 +43,7 @@ router.delete("/:email",authenticateMiddleware, userController.deleteUserEmail);
 //API - Add favourite car
 // router.post("/:id/:pinnedID",userController.deleteFav)
 
-// API - 8  Add movie to movie list
-// router.post('/:movieListId/movies/:movieId', movieListController.addMovieToMovieList);
+
 
 
 

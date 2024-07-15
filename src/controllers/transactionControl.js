@@ -1,4 +1,5 @@
 import transactionService from "../services/transactionService.js";
+import carListService from "../services/carListService.js";
 
 const deleteTransaction = async (req, res, next) => {
   const id = req.params;
@@ -32,6 +33,7 @@ const createTransaction = async (req, res, next) => {
       address,
       etc,
       pickup,
+      img,
     } = req.body;
     const data = {
       Product_Id,
@@ -43,10 +45,20 @@ const createTransaction = async (req, res, next) => {
       address,
       etc,
       pickup,
+      img,
     };
     const transaction = await transactionService.createTransaction(data);
 
-    res.status(201).json({ message: "Order Complete", data: transaction });
+    if (transaction) {
+      const deleteTransaction = await carListService.deleteTransaction(
+        Product_Id
+      );
+      res.status(201).json({ message: "complete" });
+    } else {
+      res.status(404).json({
+        message: "Failed",
+      });
+    }
   } catch (error) {
     next(error);
   }
@@ -71,7 +83,7 @@ const getTransaction = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = await transactionService.getTransactionsByUser(id);
-    res.status(200).json({ message: "success", data: data });
+    res.status(200).json(data);
   } catch (error) {
     next(error);
   }

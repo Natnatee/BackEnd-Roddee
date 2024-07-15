@@ -16,7 +16,6 @@ const createCar = async (_id, data) => {
       deleteTempcar,
     };
   } catch (error) {
-    console.error("Error creating car and deleting temporary car:", error);
     throw new Error("Error creating car and deleting temporary car:", error);
   }
 };
@@ -44,7 +43,7 @@ const searchCar = async (searchQuery) => {
 
 // lastest car
 const carLast = async () => {
-  const lastest = await Car.find().sort({ year: -1 }).limit(9);
+  const lastest = await Car.find().sort({ createOn: -1 }).limit(9);
   return lastest;
 };
 
@@ -61,6 +60,16 @@ const carAll = async () => {
     next(error);
   }
 };
+
+const deleteCar = async (id) => {
+  try {
+    const result = Car.findById(id);
+    return result;
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   createCar,
   carLast,

@@ -63,7 +63,8 @@ const carAll = async () => {
 
 const deleteCar = async (id) => {
   try {
-    const result = Car.findById(id);
+    const result = Car.findByIdAndDelete(id);
+    console.log(result);
     return result;
   } catch (error) {
     next(error);
@@ -78,4 +79,5 @@ export default {
   getCarById,
   carBrand,
   carAll,
+  deleteCar,
 };

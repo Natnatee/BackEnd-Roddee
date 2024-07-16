@@ -60,7 +60,7 @@ const createUser = async (req, res, next) => {
       to: Email,
       subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
-             <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
+             <a href="https://front-end-car-ecommerce.vercel.app/dashboard?token=${token}">Verify Email</a>`,
     };
 
     mg.messages
@@ -177,15 +177,21 @@ const createUserForAdmin = async (req, res, next) => {
 const orderPinned = async (req, res, next) => {
   try {
     const Order = await userService.topPinned(); // Get the top pinned items
-    const newOrder = await Promise.all(Order.map(async (order) => {
+
+    // Limit to top 9 items
+    const limitedOrder = Order.slice(0, 9);
+
+    const newOrder = await Promise.all(limitedOrder.map(async (order) => {
       const car = await carService.getCarById(order._id); // Fetch car details
       return car;
     }));
+
     res.status(200).json(newOrder);
   } catch (error) {
     next(error);
   }
 };
+
 
 
 // const editUser = async (req, res, next) => {

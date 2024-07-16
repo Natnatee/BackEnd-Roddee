@@ -5,7 +5,6 @@ import TemporaryCar from "../models/temporaryCar.js";
 const getCarById = async (req, res, next) => {
   try {
     const { id } = req.params; //ถ้าอยากเช็คให้
-    console.log(id);
     const car = await temporaryCarService.getCarById(id); //carService.getCarById จะไปตามหาค่าที่เราส่งไปขอ
     res.status(200).json({ car });
   } catch (error) {
@@ -16,7 +15,6 @@ const getCarById = async (req, res, next) => {
 //delete car temp
 const deleteCarById = async (req, res, next) => {
   const id = req.params;
-  console.log("id at control", id);
   const result = await temporaryCarService.deleteCarById(id);
   res.status(200).json({ message: "delete car complete", data: result });
 };
@@ -60,6 +58,11 @@ const postCar = async (req, res, next) => {
       latitude,
       longitude,
     } = req.body;
+
+    if (!file1 || !file2 || !file3 || !file4 || !file5 || !file6) {
+      return res.status(400).json({ message: "Please put all image" });
+    }
+
     if (
       !headline ||
       !brand ||
@@ -77,14 +80,10 @@ const postCar = async (req, res, next) => {
       !pnumber ||
       !address ||
       !additionalInfo ||
-      !file1 ||
-      !file2 ||
-      !file3 ||
-      !file4 ||
-      !file5 ||
-      !file6
+      !latitude ||
+      !longitude
     ) {
-      return res.status(400).json({ message: "ALL required" });
+      return res.status(400).json({ message: "Please fill all input" });
     }
     const carTem = await temporaryCarService.createCartem({
       headline,
@@ -117,8 +116,6 @@ const postCar = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
-
 };
 
-export default { getCarById, deleteCarById, getAllCars, postCar,};
+export default { getCarById, deleteCarById, getAllCars, postCar };

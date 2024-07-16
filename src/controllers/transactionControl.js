@@ -1,8 +1,8 @@
 import transactionService from "../services/transactionService.js";
+import carService from "../services/carService.js";
 
 const deleteTransaction = async (req, res, next) => {
   const id = req.params;
-  console.log("id at control", id);
   const result = await transactionService.deleteTransaction(id);
   res.status(200).json({ message: "delete complete", data: result });
 };
@@ -32,6 +32,7 @@ const createTransaction = async (req, res, next) => {
       address,
       etc,
       pickup,
+      img,
     } = req.body;
     const data = {
       Product_Id,
@@ -43,10 +44,24 @@ const createTransaction = async (req, res, next) => {
       address,
       etc,
       pickup,
+      img,
     };
     const transaction = await transactionService.createTransaction(data);
 
-    res.status(201).json({ message: "Order Complete", data: transaction });
+    if (transaction) {
+      const deleteTransaction = await carService.deleteCar(Product_Id);
+      res
+        .status(201)
+        .json({
+          message: "complete",
+          data: transaction,
+          del: deleteTransaction,
+        });
+    } else {
+      res.status(404).json({
+        message: "Failed",
+      });
+    }
   } catch (error) {
     next(error);
   }
@@ -67,4 +82,19 @@ const patchUpdate = async (req, res, next) => {
   }
 };
 
-export default { deleteTransaction, createTransaction, patchUpdate };
+const getTransaction = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const data = await transactionService.getTransactionsByUser(id);
+    res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default {
+  deleteTransaction,
+  createTransaction,
+  patchUpdate,
+  getTransaction,
+};

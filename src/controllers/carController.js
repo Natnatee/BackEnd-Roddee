@@ -1,5 +1,5 @@
 import carService from "../services/carService.js";
-import NotFoundError from "../error/NotFoundError.js"
+import NotFoundError from "../error/NotFoundError.js";
 
 // API - Create Car
 const createCar = async (req, res, next) => {
@@ -32,8 +32,36 @@ const createCar = async (req, res, next) => {
       isSell,
       adminDescription,
       Seller_User,
-      
+      _id,
     } = req.body;
+
+    if (
+      !headline ||
+      !brand ||
+      !model ||
+      !type ||
+      !year ||
+      !mileage ||
+      !color ||
+      !fuel ||
+      !enginecap ||
+      !cushion ||
+      !seat ||
+      !gear ||
+      !price ||
+      !pnumber ||
+      !address ||
+      !additionalInfo ||
+      !file1 ||
+      !file2 ||
+      !file3 ||
+      !file4 ||
+      !file5 ||
+      !file6
+    ) {
+      return res.status(400).json({ message: "Please fill all input" });
+    }
+    
     const data = {
       headline,
       brand,
@@ -62,9 +90,8 @@ const createCar = async (req, res, next) => {
       isSell,
       adminDescription,
       Seller_User,
-      
     };
-    const car = await carService.createCar(data);
+    const car = await carService.createCar(_id, data);
 
     res.status(201).json({ message: "Car Created", data: car });
   } catch (error) {
@@ -91,7 +118,6 @@ const searchCar = async (req, res, next) => {
     }
     const searchQuery = { $or: [] };
     let searchableFields = [];
-    console.log(typeof query);
     if (typeof query == "string") {
       searchableFields = [
         "headline",
@@ -134,7 +160,7 @@ const carLastest = async (req, res, next) => {
 // API - Get Car By ID
 const getCarById = async (req, res, next) => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
     const car = await carService.getCarById(id);
     res.status(200).json(car);
   } catch (error) {
@@ -145,7 +171,7 @@ const getCarById = async (req, res, next) => {
 //API - Car by Brand
 const carBrand = async (req, res, next) => {
   try {
-    const { brand } = req.params; 
+    const { brand } = req.params;
     const car = await carService.carBrand(brand);
     res.status(200).json(car);
   } catch (error) {
@@ -153,18 +179,18 @@ const carBrand = async (req, res, next) => {
   }
 };
 
-const getAll = async(req,res,next)=>{
+const getAll = async (req, res, next) => {
   try {
-    const All = await carService.carAll()
-    res.status(200).json(All)
-    if(!All){
-      throw new NotFoundError("ไม่พบสิ่งที่คุณต้องการ")
+    const All = await carService.carAll();
+    res.status(200).json(All);
+    if (!All) {
+      throw new NotFoundError("ไม่พบสิ่งที่คุณต้องการ");
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
-  
+};
+
 export {
   createCar,
   getCarById,

@@ -49,6 +49,16 @@ const transactionSchema = new mongoose.Schema({
   etc: {
     type: String,
   },
+  img: {
+    type: String,
+    default: null,
+    validate: {
+      validator: function (v) {
+        return /^(ftp|http|https):\/\/[^ "]+$/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid URL!`,
+    },
+  },
 });
 
 const Transaction = mongoose.model("Transaction", transactionSchema);

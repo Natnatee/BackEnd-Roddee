@@ -60,17 +60,15 @@ const createUser = async (req, res, next) => {
       to: Email,
       subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
-             <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
+             <a href="https://front-end-car-ecommerce.vercel.app/dashboard?token=${token}">Verify Email</a>`,
     };
 
     mg.messages
       .create(process.env.MAILGUN_DOMAIN, mailOptions)
       .then((body) => {
-        console.log("Email sent:", body);
         res.status(201).json({ message: "Verification email sent" });
       })
       .catch((error) => {
-        console.error("Error sending email:", error);
         throw new Error("Failed to send verification email");
       });
   } catch (error) {
@@ -175,14 +173,19 @@ const createUserForAdmin = async (req, res, next) => {
 };
 
 //API : orderPinned
-// API: orderPinned
+
 const orderPinned = async (req, res, next) => {
   try {
     const Order = await userService.topPinned(); // Get the top pinned items
-    const newOrder = await Promise.all(Order.map(async (order) => {
+
+    // Limit to top 9 items
+    const limitedOrder = Order.slice(0, 9);
+
+    const newOrder = await Promise.all(limitedOrder.map(async (order) => {
       const car = await carService.getCarById(order._id); // Fetch car details
       return car;
     }));
+
     res.status(200).json(newOrder);
   } catch (error) {
     next(error);
@@ -190,32 +193,45 @@ const orderPinned = async (req, res, next) => {
 };
 
 
-const editUser = async (req, res, next) => {
-  try {
-    const {
-      _id,
-      FirstName,
-      LastName,
-      Email,
-      Password,
-      Profile_Image,
-      isAdmin,
-      pinned,
-    } = req.body;
-    const data = {
-      FirstName,
-      LastName,
-      Email,
-      Password,
-      Profile_Image,
-      isAdmin,
-      pinned,
-    };
 
-    const user = await userService.editUser(_id, data);
-    res.status(201).json({ message: "Edit data", data: user });
+// const editUser = async (req, res, next) => {
+//   try {
+//     const {
+//       _id,
+//       FirstName,
+//       LastName,
+//       Email,
+//       Password,
+//       Profile_Image,
+//       isAdmin,
+//       pinned,
+//     } = req.body;
+//     const data = {
+//       FirstName,
+//       LastName,
+//       Email,
+//       Password,
+//       Profile_Image,
+//       isAdmin,
+//       pinned,
+//     };
+
+//     const user = await userService.editUser(_id, data);
+//     res.status(201).json({ message: "Edit data", data: user });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+//edit v2
+const editUser = async (req, res) => {
+  try {
+    const user = await userService.editUser(req.params.id, req.body);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json(user);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -223,7 +239,6 @@ const forgetPassword = async (req, res, next) => {
   try {
     const { Email } = req.body;
 
-    console.log("Email from request:", Email);
     const existUser = await userService.getRecoverByEmail(Email);
     if (!existUser) {
       return res.status(400).json({ message: "Email not found" });
@@ -240,19 +255,23 @@ const forgetPassword = async (req, res, next) => {
 };
 
 // user profile 
-  const viewprofilebyID = async(req,res,next)=>{
-    try {
-      const user_id = req.params.id
-      const viewid =await userService.profileID(user_id)
-      if(!viewid){
-        res.status(404).json({message:"Not found user"})
-      }
-     res.status(200).json(viewid)
-    } catch (error) {
-      res.status(400).json({message:"ดูดีๆ"})
-    }
-  };
+const viewprofilebyID = async (req, res, next) => {
+  try {
+    const user_id = req.params.id;
+    const viewid = await userService.profileID(user_id);
 
+    if (!viewid) {
+      return res.status(404).json({ message: "Not found user" });
+    }
+
+    res.status(200).json(viewid);
+  } catch (error) {
+    res.status(400).json({ message: "ดูดีๆ" });
+  }
+};
+
+
+  //view all
   const viewprofile = async(req,res,next)=>{
     try {
       const viewall = await userService.profile()
@@ -296,15 +315,31 @@ const uploadProfile = async (req, res, next) => {
     }
     res.status(200).json(user);
   } catch (error) {
-    console.error('Error updating profile image:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
 
+//get by id for edit user page only
+const getProfileInfo = async (req, res, next) => {
+try {
+  const user = await User.findById(req.params.id);
+  if (!user) return res.status(404).json({ message: 'User not found' });
+
+  res.json(user);
+} catch (error) {
+  res.status(500).json({ message: error.message });
+}
+};
+    
+   
 
 
 
 
 
 
-export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword,viewprofilebyID,viewprofile,deleteFav, createUserForAdmin, uploadProfile};
+
+
+
+
+export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword, viewprofilebyID, viewprofile, deleteFav, createUserForAdmin, uploadProfile, getProfileInfo};

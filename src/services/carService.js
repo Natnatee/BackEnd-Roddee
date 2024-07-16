@@ -62,7 +62,6 @@ const carAll = async () => {
 const deleteCar = async (id) => {
   try {
     const result = Car.findByIdAndDelete(id);
-    console.log(result);
     return result;
   } catch (error) {
     next(error);

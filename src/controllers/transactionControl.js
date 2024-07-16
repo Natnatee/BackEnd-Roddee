@@ -1,5 +1,5 @@
 import transactionService from "../services/transactionService.js";
-import carListService from "../services/carListService.js";
+import carService from "../services/carService.js";
 
 const deleteTransaction = async (req, res, next) => {
   const id = req.params;
@@ -49,10 +49,14 @@ const createTransaction = async (req, res, next) => {
     const transaction = await transactionService.createTransaction(data);
 
     if (transaction) {
-      const deleteTransaction = await carListService.deleteTransaction(
-        Product_Id
-      );
-      res.status(201).json({ message: "complete" });
+      const deleteTransaction = await carService.deleteCar(Product_Id);
+      res
+        .status(201)
+        .json({
+          message: "complete",
+          data: transaction,
+          del: deleteTransaction,
+        });
     } else {
       res.status(404).json({
         message: "Failed",

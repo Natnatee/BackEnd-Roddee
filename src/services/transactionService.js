@@ -3,9 +3,7 @@ import User from "../models/user.js";
 import Car from "../models/car.js";
 const deleteTransaction = async (idObject) => {
   const id = idObject.id;
-  console.log("sending id:", id);
   const result = await Transaction.findByIdAndDelete(id);
-  console.log(result);
   return result;
 };
 
@@ -48,14 +46,11 @@ const createTransaction = async (data) => {
 
 const getTransactionsByUser = async (id) => {
   try {
-    console.log(id);
     const transactions = await Transaction.find({
       Purchase_User: id,
     }).exec();
-    console.log(transactions);
     return transactions;
   } catch (error) {
-    console.error("Error fetching transactions by user:", error);
     throw error; // Re-throw the error to be handled by the calling function
   }
 };

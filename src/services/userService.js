@@ -11,7 +11,6 @@ const createUser = async (data) => {
 //API - Forget Password
 const getRecoverByEmail = async (Email) => {
   const emailCheck = await User.findOne({ Email: Email });
-  console.log("Email found:", emailCheck);
   return emailCheck;
 };
 
@@ -36,7 +35,6 @@ const topPinned = async () => {
 
 // const editUser = async (_id, data) => {
 //   const user = await User.findOneAndUpdate({ _id }, data, { new: true });
-//   console.log(user);
 //   return user;
 // };
 
@@ -71,9 +69,7 @@ const delectcarlist = async (id, pinnedArray) => {
     if (!user_id) {
       throw new NotFoundError("User Not found");
     }
-    console.log(pinnedArray);
     const index = user_id.pinned.indexOf(pinnedArray);
-    console.log(index);
     user_id.pinned.splice(index, 1);
     await user_id.save();
     return user_id;

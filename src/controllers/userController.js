@@ -66,11 +66,9 @@ const createUser = async (req, res, next) => {
     mg.messages
       .create(process.env.MAILGUN_DOMAIN, mailOptions)
       .then((body) => {
-        console.log("Email sent:", body);
         res.status(201).json({ message: "Verification email sent" });
       })
       .catch((error) => {
-        console.error("Error sending email:", error);
         throw new Error("Failed to send verification email");
       });
   } catch (error) {
@@ -235,7 +233,6 @@ const forgetPassword = async (req, res, next) => {
   try {
     const { Email } = req.body;
 
-    console.log("Email from request:", Email);
     const existUser = await userService.getRecoverByEmail(Email);
     if (!existUser) {
       return res.status(400).json({ message: "Email not found" });
@@ -312,7 +309,6 @@ const uploadProfile = async (req, res, next) => {
     }
     res.status(200).json(user);
   } catch (error) {
-    console.error('Error updating profile image:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

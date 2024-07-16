@@ -118,7 +118,6 @@ const searchCar = async (req, res, next) => {
     }
     const searchQuery = { $or: [] };
     let searchableFields = [];
-    console.log(typeof query);
     if (typeof query == "string") {
       searchableFields = [
         "headline",

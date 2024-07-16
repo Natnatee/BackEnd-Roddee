@@ -23,7 +23,6 @@ const createCar = async (_id, data) => {
 const getCarById = async (id) => {
   try {
     const car = await Car.findById(id); // ใช้ findById เพื่อค้นหารถตาม id
-    console.log("ServiceCar", car);
     return car;
   } catch (error) {
     throw new Error("Error fetching car");
@@ -37,7 +36,6 @@ const randomCars = async () => {
 
 const searchCar = async (searchQuery) => {
   const cars = await Car.find(searchQuery);
-  console.log(cars);
   return cars;
 };
 

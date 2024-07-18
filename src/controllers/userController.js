@@ -2,15 +2,18 @@ import userService from "../services/userService.js";
 import { hashPassword, comparePassword } from "../utils/hash.js";
 import { sign, verify } from "../utils/token.js";
 import BadRequestError from "../error/BadRequestError.js";
-import formData from "form-data";
-import Mailgun from "mailgun.js";
+// import formData from "form-data";
+// import Mailgun from "mailgun.js";
 import User from "../models/user.js";
 import carService from "../services/carService.js";
+import nodemailer from "nodemailer";
 
-const mailgun = new Mailgun(formData);
-const mg = mailgun.client({
-  username: "api",
-  key: process.env.MAILGUN_API_KEY,
+const transporter = nodemailer.createTransport({
+  service: 'hotmail', // ใช้ 'hotmail' สำหรับ Outlook
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
 });
 
 // API - Create User
@@ -32,7 +35,6 @@ const createUser = async (req, res, next) => {
     if (!Email) throw new BadRequestError('Email is required');
     if (!Password) throw new BadRequestError('Password is required');
     if (!confirmPassword) throw new BadRequestError('Confirm password is required');
-    // if (!Profile_Image) throw new BadRequestError('Profile image is required');
     // Check if password and confirmPassword match
     if (Password !== confirmPassword) {
       throw new BadRequestError("Password does not match");
@@ -54,23 +56,22 @@ const createUser = async (req, res, next) => {
       pnumber,
     });
 
-    // Send verification email using Mailgun
+    // Send verification email using Nodemailer
     const mailOptions = {
-      from: 'RoddeeJSD7@outlook.com', // Replace with your email address
+      from: process.env.EMAIL_USER, // ใช้อีเมลที่ตั้งค่าใน .env
       to: Email,
       subject: "Email Verification",
       html: `<p>Please verify your email by clicking the link below:</p>
-             <a href="http://localhost:5173/dashboard?token=${token}">Verify Email</a>`,
+             <a href="https://roddee-company.vercel.app/dashboard?token=${token}">Verify Email</a>`,
     };
 
-    mg.messages
-      .create(process.env.MAILGUN_DOMAIN, mailOptions)
-      .then((body) => {
-        res.status(201).json({ message: "Verification email sent" });
-      })
-      .catch((error) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
         throw new Error("Failed to send verification email");
-      });
+      } else {
+        res.status(201).json({ message: "Verification email sent" });
+      }
+    });
   } catch (error) {
     next(error);
   }

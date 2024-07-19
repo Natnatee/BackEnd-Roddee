@@ -24,6 +24,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+app.set('trust proxy', 1);
 app.use(bodyParser.json());
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

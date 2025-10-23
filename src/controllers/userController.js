@@ -44,8 +44,8 @@ const createUser = async (req, res, next) => {
     if (userCheckMail) throw new BadRequestError("Email already exists");
     // Hash password
     const hashedPassword = await hashPassword(Password);
-    // Generate token with user data
-    const token = sign({
+    // Create user
+    const newUser = await userService.createUser({
       FirstName,
       LastName,
       Email,
@@ -55,23 +55,10 @@ const createUser = async (req, res, next) => {
       pinned,
       pnumber,
     });
-
-    // Send verification email using Nodemailer
-    const mailOptions = {
-      from: process.env.EMAIL_USER, // ใช้อีเมลที่ตั้งค่าใน .env
-      to: Email,
-      subject: "Email Verification",
-      html: `<p>Please verify your email by clicking the link below:</p>
-             <a href="https://roddee-company.vercel.app/dashboard?token=${token}">Verify Email</a>`,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        throw new Error("Failed to send verification email");
-      } else {
-        res.status(201).json({ message: "Verification email sent" });
-      }
-    });
+    // Generate token
+    const token = sign({ id: newUser.id });
+    delete newUser.Password;
+    res.status(201).json({ message: "Create User", data: newUser, access_token: token });
   } catch (error) {
     next(error);
   }
@@ -156,14 +143,14 @@ const createUserForAdmin = async (req, res, next) => {
     if (!confirmPassword) throw new BadRequestError('Confirm password is required');
     // if (!Profile_Image) throw new BadRequestError('Profile image is required');
     // Check if password and confirmPassword match
-    if (Password !== confirmPassword) {throw new BadRequestError('Password does not match');}
+    if (Password !== confirmPassword) { throw new BadRequestError('Password does not match'); }
     // Check if email already exists
     const userCheckMail = await userService.getUserByEmail(Email);
     if (userCheckMail) throw new BadRequestError('Email already exists');
     // Hash password
     const hashedPassword = await hashPassword(Password);
     // Create user
-    const newUser = await userService.createUser({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin:false, pinned, pnumber });
+    const newUser = await userService.createUser({ FirstName, LastName, Email, Password: hashedPassword, Profile_Image, isAdmin: false, pinned, pnumber });
     // Generate token
     const token = sign({ id: newUser.id });
 
@@ -255,7 +242,7 @@ const forgetPassword = async (req, res, next) => {
   }
 };
 
-// user profile 
+// user profile
 const viewprofilebyID = async (req, res, next) => {
   try {
     const user_id = req.params.id;
@@ -272,29 +259,29 @@ const viewprofilebyID = async (req, res, next) => {
 };
 
 
-  //view all
-  const viewprofile = async(req,res,next)=>{
-    try {
-      const viewall = await userService.profile()
-      res.status(201).json(viewall)
-    } catch (error) {
-      res.status(400).json({message:"error viewprofile"})
-    }
-  };
-
-  // delete fav
-  const deleteFav = async(req,res,next)=>{
-    try {
-      const user_id = req.params.id
-      const delectpinnedArray = req.params.pinnedID  
-      const pinnedID = req.params.pinnedID
-      const delect = await userService.delectcarlist(user_id,delectpinnedArray)
-      res.status(400).json({message:"delect success",pinnedID,delect})
-    } catch (error) {
-      next(error)
-    }
+//view all
+const viewprofile = async (req, res, next) => {
+  try {
+    const viewall = await userService.profile()
+    res.status(201).json(viewall)
+  } catch (error) {
+    res.status(400).json({ message: "error viewprofile" })
   }
-  
+};
+
+// delete fav
+const deleteFav = async (req, res, next) => {
+  try {
+    const user_id = req.params.id
+    const delectpinnedArray = req.params.pinnedID
+    const pinnedID = req.params.pinnedID
+    const delect = await userService.delectcarlist(user_id, delectpinnedArray)
+    res.status(400).json({ message: "delect success", pinnedID, delect })
+  } catch (error) {
+    next(error)
+  }
+}
+
 
 
 const deleteUserEmail = async (req, res, next) => {
@@ -322,17 +309,15 @@ const uploadProfile = async (req, res, next) => {
 
 //get by id for edit user page only
 const getProfileInfo = async (req, res, next) => {
-try {
-  const user = await User.findById(req.params.id);
-  if (!user) return res.status(404).json({ message: 'User not found' });
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
-  res.json(user);
-} catch (error) {
-  res.status(500).json({ message: error.message });
-}
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
-    
-   
 
 
 
@@ -343,4 +328,6 @@ try {
 
 
 
-export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword, viewprofilebyID, viewprofile, deleteFav, createUserForAdmin, uploadProfile, getProfileInfo};
+
+
+export { createUser, verifyEmail, editUser, deleteUserEmail, login, orderPinned, forgetPassword, viewprofilebyID, viewprofile, deleteFav, createUserForAdmin, uploadProfile, getProfileInfo };
